@@ -16,6 +16,8 @@ public static partial class Methods
 
         private static IResult Method(int id, Todos todos)
         {
+            Console.WriteLine("Delete");
+
             var todo = todos.FirstOrDefault(x => x.Id == id);
             if (todo != null)
             {
