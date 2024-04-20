@@ -15,10 +15,9 @@ app.UseSwaggerUI();
 
 app.UseHttpsRedirection();
 
-Methods.RegisterRender(app);
-
-Methods.RegisterAdd(app);
-Methods.RegisterUpdate(app);
-Methods.RegisterDelete(app);
+Methods.Render.Register(app);
+Methods.Add.Register(app);
+Methods.Update.Register(app);
+Methods.Delete.Register(app);
 
 app.Run();

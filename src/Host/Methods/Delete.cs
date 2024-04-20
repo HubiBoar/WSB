@@ -5,23 +5,24 @@ namespace ToDoApp;
 
 public static partial class Methods
 {
-    private static readonly string DeleteTodoPath = "/delete-todo";
-    private static HtmlAttribute DeleteTodoHtmx(Todo todo) => Htmx.Delete($"{DeleteTodoPath}/{todo.Id}");
-
-    public static void RegisterDelete(WebApplication app) =>
-        app.MapDelete(DeleteTodoPath, Methods.DeleteTodo)
-           .WithOpenApi();
-
-    public static IResult DeleteTodo(int id, Todos todos)
+    public static class Delete
     {
-        Console.WriteLine("Add");
+        private static readonly string Path = "/delete-todo";
+        public static HtmlAttribute Htmx(Todo todo) => ToDoApp.Htmx.Delete($"{Path}/{todo.Id}");
 
-        var todo = todos.FirstOrDefault(x => x.Id == id);
-        if (todo != null)
+        public static void Register(WebApplication app) =>
+            app.MapDelete(Path + "/{id:int}", Method)
+            .WithOpenApi();
+
+        private static IResult Method(int id, Todos todos)
         {
-            todos.Remove(todo);
-        }
+            var todo = todos.FirstOrDefault(x => x.Id == id);
+            if (todo != null)
+            {
+                todos.Remove(todo);
+            }
 
-        return todos.Select(RenderTodo).ToIResult();
+            return todos.Select(Render.Todo).ToIResult();
+        }
     }
 }

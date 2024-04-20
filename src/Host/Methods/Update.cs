@@ -6,26 +6,29 @@ namespace ToDoApp;
 
 public static partial class Methods
 {
-    public sealed record UpdateTodoCommand(int Id, int Pos, bool Value);
-
-    private static readonly string UpdateTodoPath = "/update-todo";
-    private static readonly HtmlAttribute UpdateTodoHtmx = Htmx.Put(UpdateTodoPath);
-
-    public static void RegisterUpdate(WebApplication app) =>
-         app.MapPut(UpdateTodoPath, Methods.UpdateTodoMethod)
-            .WithOpenApi();
-
-    private static IResult UpdateTodoMethod([FromBody] UpdateTodoCommand command, Todos todos)
+    public static class Update
     {
-        Console.WriteLine("Update");
+        public sealed record Command(int Id, int Pos, bool Value);
 
-        var todo = todos.FirstOrDefault(x => x.Id == command.Id);
-        if (todo != null)
+        private static readonly string Path = "/update-todo";
+        public static readonly HtmlAttribute Htmx = ToDoApp.Htmx.Put(Path);
+
+        public static void Register(WebApplication app) =>
+            app.MapPut(Path, Method)
+                .WithOpenApi();
+
+        private static IResult Method([FromBody] Command command, Todos todos)
         {
-            todos.Remove(todo);
-            todos.Insert(command.Pos, todo with { Done = command.Value });
-        }
+            Console.WriteLine("Update");
 
-        return todos.Select(RenderTodo).ToIResult();
+            var todo = todos.FirstOrDefault(x => x.Id == command.Id);
+            if (todo != null)
+            {
+                todos.Remove(todo);
+                todos.Insert(command.Pos, todo with { Done = command.Value });
+            }
+
+            return todos.Select(Render.Todo).ToIResult();
+        }
     }
 }
