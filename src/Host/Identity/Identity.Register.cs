@@ -1,8 +1,6 @@
 using System.Security.Claims;
-using System.Text.Json;
 using HyperTextExpression.AspNetCore;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using static HyperTextExpression.HtmlExp;
 
@@ -82,7 +80,7 @@ public static partial class Identity
                                 Attrs(
                                     Htmx.Post("/identity/login"),
                                     Htmx.Ext("json-enc"),
-                                    Htmx.OnAfterRequest($"(document.getElementById('{Element.LoginInput}').value = '')"),
+                                    Htmx.OnAfterRequest($"(document.getElementById('{Element.LoginInput}').value = 'Refresh')"),
                                     Htmx.OnAfterRequest($"(document.getElementById('{Element.PasswordInput}').value = '')")
                                 ),
                                 "Login"),
@@ -90,7 +88,7 @@ public static partial class Identity
                                 Attrs(
                                     Htmx.Post("/identity/register"),
                                     Htmx.Ext("json-enc"),
-                                    Htmx.OnAfterRequest($"(document.getElementById('{Element.LoginInput}').value = '')"),
+                                    Htmx.OnAfterRequest($"(document.getElementById('{Element.LoginInput}').value = 'Refresh and Login')"),
                                     Htmx.OnAfterRequest($"(document.getElementById('{Element.PasswordInput}').value = '')")
                                 ),
                                 "Register")

@@ -1,5 +1,3 @@
-using System.Security.Claims;
-
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddEndpointsApiExplorer();
@@ -17,9 +15,6 @@ var app = builder.Build();
 
 app.UseSwagger();
 app.UseSwaggerUI();
-
-app.MapGet("/Users", (ClaimsPrincipal user) => $"Hello {user.Identity!.Name}")
-    .RequireAuthorization();
 
 Todo.Map(app);
 Identity.Map(app);
