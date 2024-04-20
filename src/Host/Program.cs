@@ -5,7 +5,8 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-Todos.RegisterServices(builder.Services);
+BoolConverter.Register(builder.Services);
+Todos.Register(builder.Services);
 
 var app = builder.Build();
 
@@ -14,7 +15,10 @@ app.UseSwaggerUI();
 
 app.UseHttpsRedirection();
 
-app.MapGet("/", Methods.App)
-    .WithOpenApi();
+Methods.RegisterRender(app);
+
+Methods.RegisterAdd(app);
+Methods.RegisterUpdate(app);
+Methods.RegisterDelete(app);
 
 app.Run();

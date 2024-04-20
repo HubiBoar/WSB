@@ -1,13 +1,21 @@
 using HyperTextExpression;
 using HyperTextExpression.AspNetCore;
 using static HyperTextExpression.HtmlExp;
-using static ToDoApp.HtmxHelper;
+using static ToDoApp.Htmx;
 
 namespace ToDoApp;
 
 public static partial class Methods
 {
-    public static IResult Render(Todos todos) => HtmlDoc(
+    public static void RegisterRender(WebApplication app)
+    {
+        Console.WriteLine("Get");
+
+        app.MapGet("/", Render)
+           .WithOpenApi();
+    }
+
+    private static IResult Render(Todos todos) => HtmlDoc(
         Head(
             ("title", "Todo App!")
         ),
@@ -31,10 +39,10 @@ public static partial class Methods
                         ),
                         ("button",
                             Attrs(
-                                "hx-post", "/todo-app/add-todo",
-                                "hx-ext", "json-enc",
-                                "hx-target", "#todo-list",
-                                "hx-on", "htmx:afterRequest: (document.getElementById('todo-input').value = '')"
+                                AddTodoHtmx,
+                                ("hx-ext", "json-enc"),
+                                ("hx-target", "#todo-list"),
+                                ("hx-on", "htmx:afterRequest: (document.getElementById('todo-input').value = '')")
                             ),
                             "add")
                     )
@@ -54,7 +62,7 @@ public static partial class Methods
                 Attrs(
                     ("type", "checkbox"),
                     todo.Done ? "checked" : "",
-                    ("hx-put", "/todo-app/update-status"),
+                    UpdateTodoHtmx,
                     ("hx-ext", "json-enc"),
                     ("hx-target", "#todo-list")
                 )
@@ -68,8 +76,8 @@ public static partial class Methods
             ),
             ("a",
                 Attrs(
-                    "hx-delete", $"/todo-app/delete-todo/{todo.Id}",
-                    "hx-target", "#todo-list"
+                    DeleteTodoHtmx(todo),
+                    ("hx-target", "#todo-list")
                 ),
                 "Delete"
             )

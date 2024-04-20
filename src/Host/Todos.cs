@@ -6,7 +6,7 @@ public sealed class Todos : List<Todo>
 {
     private int _idCount = 0;
 
-    public static IServiceCollection RegisterServices(IServiceCollection services) => services.AddSingleton<Todos>();
+    public static IServiceCollection Register(IServiceCollection services) => services.AddSingleton<Todos>();
 
     public Todos()
     {
