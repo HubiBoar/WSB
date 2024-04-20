@@ -1,10 +1,9 @@
+using System.Security.Claims;
 using HyperTextExpression;
 using HyperTextExpression.AspNetCore;
 using static HyperTextExpression.HtmlExp;
 
-namespace ToDoApp;
-
-public static partial class Methods
+public static partial class Todo
 {
     public static class Render
     {
@@ -14,25 +13,27 @@ public static partial class Methods
             public const string Input = "todo-input";
         }
 
-        public static void Register(WebApplication app) =>
-            app.MapGet("/", (Todos todos) => 
-                {
-                    Console.WriteLine("Get");
-                    return Method(todos);
-                })
-                .WithOpenApi();
+        public static void Map(WebApplication app) => app
+            .MapGet("/", async (ClaimsPrincipal user, Context context) => 
+            {
+                Console.WriteLine("Get");
+                var todos = await user.GetTodos(context);
+                return Method(user.Identity!.Name!, todos);
+            })
+            .WithOpenApi()
+            .RequireAuthorization();
 
-        private static IResult Method(Todos todos) => HtmlDoc(
+        private static IResult Method(string username, IReadOnlyCollection<Record> todos) => HtmlDoc(
             Head(
                 ("title", "Todo App!")
             ),
             Body(
                 Div(
                     Attrs("style", "max-width: 800px; margin: auto; margin-bottom: 5rem;"),
-                    ("h1", "My to do's"),
+                    ("h2", $"ToDo list for {username}"),
                     Div(
-                        Attrs("id", $"{Element.List}"),
-                        todos.Select(Todo)
+                        Attrs("id", Element.List),
+                        todos.Select(RenderTodo)
                     ),
                     Div(
                         HtmlEl("form",
@@ -46,7 +47,7 @@ public static partial class Methods
                             ),
                             ("button",
                                 Attrs(
-                                    Add.Htmx,
+                                    Add.Html,
                                     Htmx.Ext("json-enc"),
                                     Htmx.TargetHash(Element.List),
                                     Htmx.OnAfterRequest($"(document.getElementById('{Element.Input}').value = '')")
@@ -60,16 +61,13 @@ public static partial class Methods
             )
         ).ToIResult();
 
-        public static HtmlEl Todo(Todo todo, int index) =>
+        public static HtmlEl RenderTodo(Record todo, int index) =>
             HtmlEl("form",
-                ("span", Children(
-                    ("strong", $"{todo.Id}.")
-                )),
                 ("input",
                     Attrs(
                         ("type", "checkbox"),
                         todo.Done ? "checked" : "",
-                        Update.Htmx,
+                        Update.Html,
                         Htmx.Ext("json-enc"),
                         Htmx.TargetHash(Element.List)
                     )
@@ -83,7 +81,7 @@ public static partial class Methods
                 ),
                 ("a",
                     Attrs(
-                        Delete.Htmx(todo),
+                        Delete.Html(todo),
                         Htmx.TargetHash(Element.List)
                     ),
                     "Delete"

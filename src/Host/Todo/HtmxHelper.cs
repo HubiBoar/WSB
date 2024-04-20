@@ -1,8 +1,6 @@
 using HyperTextExpression;
 using static HyperTextExpression.HtmlExp;
 
-namespace ToDoApp;
-
 public static class Htmx
 {
     public static HtmlEl HtmxScript = (

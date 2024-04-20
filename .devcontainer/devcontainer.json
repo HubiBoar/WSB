@@ -19,7 +19,8 @@
 				"eamodio.gitlens",
 				"Postman.postman-for-vscode",
 				"sleistner.vscode-fileutils",
-				"patbenatar.advanced-new-file"
+				"patbenatar.advanced-new-file",
+				"qwtel.sqlite-viewer"
 			]
 		}
 	}

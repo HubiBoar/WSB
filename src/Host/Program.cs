@@ -1,23 +1,27 @@
-using ToDoApp;
+using System.Security.Claims;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(opt => 
+{
+    opt.CustomSchemaIds(x => x.FullName);
+});
 
-BoolConverter.Register(builder.Services);
-Todos.Register(builder.Services);
+var db = DataBase.Sqlite;
+
+Todo.Register(builder.Services, db);
+Identity.Register(builder.Services, db);
 
 var app = builder.Build();
 
 app.UseSwagger();
 app.UseSwaggerUI();
 
-app.UseHttpsRedirection();
+app.MapGet("/Users", (ClaimsPrincipal user) => $"Hello {user.Identity!.Name}")
+    .RequireAuthorization();
 
-Methods.Render.Register(app);
-Methods.Add.Register(app);
-Methods.Update.Register(app);
-Methods.Delete.Register(app);
+Todo.Map(app);
+Identity.Map(app);
 
 app.Run();
