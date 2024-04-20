@@ -42,6 +42,11 @@ public static partial class Identity
         })
         .WithOpenApi()
         .AllowAnonymous();
+
+        using var scope = app.Services.CreateScope();
+        using var context = scope.ServiceProvider.GetRequiredService<Context>();
+    
+        context.Database.EnsureCreated();
     }
 
     public static class LoginPage

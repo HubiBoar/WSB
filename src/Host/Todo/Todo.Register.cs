@@ -14,6 +14,11 @@ public static partial class Todo
         List.Map(app);
         Add.Map(app);
         Update.Map(app);
-        Delete.Map(app);        
+        Delete.Map(app);
+
+        using var scope = app.Services.CreateScope();
+        using var context = scope.ServiceProvider.GetRequiredService<Context>();
+    
+        context.Database.EnsureCreated();
     }
 }
