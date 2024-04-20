@@ -68,3 +68,14 @@ aby to osiągnąć musiałem napisać sporo dodatkowych funkcjonalności.
 ## Schematy
 
 ![Schemat](Schemat.png)
+
+
+## Screeny
+
+### Logowanie/Rejestrowanie:
+
+![Screen1](Screen1.png)
+
+### Lista zadań:
+
+![Screen2](Screen2.png)
