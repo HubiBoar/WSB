@@ -16,7 +16,7 @@ Użytkownik powinien móc edytować liste poprzez dodawanie nowych zadań, usuwa
 Użytkownicy powinni być trzymani w Bazie danych (aktualnie Sqlite) wraz ze swoimi danymi i listami zadań.
 Lista zadań powinna na bieżąco aktualizować sie w bazie danych i być widoczna tylko dla aktualnie zalogowanego użytkownika.
 Sesja użytkownika powinna być zapisana w formie Cookies.
-Wszystkie endpointy API powinny być dostępne przy użyciu standardu OpenApi.
+Wszystkie endpointy API powinny być dostępne przy użyciu standardu OpenApi pod endpointem **/swagger**.
 
 ## Odbiorcy
 
@@ -51,6 +51,14 @@ Wyzwaniem było stworzenie projektu z użyciem HTMXa, który nie jest jeszcze po
 aby to osiągnąć musiałem napisać sporo dodatkowych funkcjonalności.
 
 ## Uruchomienie
+
+- Testowy login: **hubibubi@gmail.com** hasło: **Test!1**
+
+### Azure Cloud
+- Aplikacja ma wbudowany system CI/CD z użyciem Azure Cloud oraz GitHub Actions, gdzie przy każdym commicie na Main branch, aplikacja w chmurze sie aktualizuje.
+ - [Link do Aplikacji postawionej na Azure](https://hubert-dzikuc-wsb-todo.azurewebsites.net/)
+
+### Lokalnie
 
 - Aplikacja wymaga zainstalowanego .Net Sdk 8.0 [Link](https://dotnet.microsoft.com/en-us/download/dotnet/8.0).
 - Komenda **dotnet run** w folderze **src/Host** uruchamia aplikacje.
