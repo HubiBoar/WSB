@@ -14,13 +14,13 @@ public static partial class Methods
             public const string Input = "todo-input";
         }
 
-        public static void Register(WebApplication app)
-        {
-            Console.WriteLine("Get");
-
-            app.MapGet("/", Method)
-            .WithOpenApi();
-        }
+        public static void Register(WebApplication app) =>
+            app.MapGet("/", (Todos todos) => 
+                {
+                    Console.WriteLine("Get");
+                    return Method(todos);
+                })
+                .WithOpenApi();
 
         private static IResult Method(Todos todos) => HtmlDoc(
             Head(
