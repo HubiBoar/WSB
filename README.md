@@ -49,4 +49,4 @@ aby to osiągnąć musiałem napisać sporo dodatkowych funkcjonalności.
 
 ## Schematy
 
-![Schemat](schemat.png)
+![Schemat](Schemat.png)
