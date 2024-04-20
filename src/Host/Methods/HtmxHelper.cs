@@ -18,6 +18,12 @@ public static class Htmx
         Attrs("src", "https://unpkg.com/htmx.org/dist/ext/json-enc.js")
     );
 
+    public static HtmlAttribute Ext(string value)    => ("hx-ext", value);
+    public static HtmlAttribute Target(string value)    => ("hx-target", value);
+    public static HtmlAttribute TargetHash(string value)    => ("hx-target", $"#{value}");
+    public static HtmlAttribute On(string value)    => ("hx-on", value);
+    public static HtmlAttribute OnAfterRequest(string value)    => ("hx-on", $"htmx:afterRequest: {value}");
+
     public static HtmlAttribute Get(string path)    => ("hx-get", path);
     public static HtmlAttribute Put(string path)    => ("hx-put", path);
     public static HtmlAttribute Post(string path)   => ("hx-post", path);

@@ -1,7 +1,6 @@
 using HyperTextExpression;
 using HyperTextExpression.AspNetCore;
 using static HyperTextExpression.HtmlExp;
-using static ToDoApp.Htmx;
 
 namespace ToDoApp;
 
@@ -9,6 +8,12 @@ public static partial class Methods
 {
     public static class Render
     {
+        public static class Element
+        {
+            public const string List  = "todo-list";
+            public const string Input = "todo-input";
+        }
+
         public static void Register(WebApplication app)
         {
             Console.WriteLine("Get");
@@ -26,7 +31,7 @@ public static partial class Methods
                     Attrs("style", "max-width: 800px; margin: auto; margin-bottom: 5rem;"),
                     ("h1", "My to do's"),
                     Div(
-                        Attrs("id", "todo-list"),
+                        Attrs("id", $"{Element.List}"),
                         todos.Select(Todo)
                     ),
                     Div(
@@ -34,7 +39,7 @@ public static partial class Methods
                             ("h4", "Add Todo"),
                             ("input",
                                 Attrs(
-                                    ("id", "todo-input"),
+                                    ("id", Element.Input),
                                     ("type", "text"),
                                     ("name", "deed")
                                 )
@@ -42,16 +47,16 @@ public static partial class Methods
                             ("button",
                                 Attrs(
                                     Add.Htmx,
-                                    ("hx-ext", "json-enc"),
-                                    ("hx-target", "#todo-list"),
-                                    ("hx-on", "htmx:afterRequest: (document.getElementById('todo-input').value = '')")
+                                    Htmx.Ext("json-enc"),
+                                    Htmx.TargetHash(Element.List),
+                                    Htmx.OnAfterRequest($"(document.getElementById('{Element.Input}').value = '')")
                                 ),
                                 "add")
                         )
                     )
                 ),
-                HtmxScript,
-                HtmxJsonEncScript
+                Htmx.HtmxScript,
+                Htmx.HtmxJsonEncScript
             )
         ).ToIResult();
 
@@ -65,8 +70,8 @@ public static partial class Methods
                         ("type", "checkbox"),
                         todo.Done ? "checked" : "",
                         Update.Htmx,
-                        ("hx-ext", "json-enc"),
-                        ("hx-target", "#todo-list")
+                        Htmx.Ext("json-enc"),
+                        Htmx.TargetHash(Element.List)
                     )
                 ),
                 ("input", Attrs(("type", "hidden"), ("name", "id"), ("value", todo.Id))),
@@ -79,7 +84,7 @@ public static partial class Methods
                 ("a",
                     Attrs(
                         Delete.Htmx(todo),
-                        ("hx-target", "#todo-list")
+                        Htmx.TargetHash(Element.List)
                     ),
                     "Delete"
                 )
