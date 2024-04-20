@@ -6,15 +6,15 @@ public static partial class Todo
 {
     public static class Delete
     {
-        private static readonly string Path = "/delete-todo";
+        private static readonly string Path = "/todo/delete";
         public static HtmlAttribute Html(Record todo) => Htmx.Delete($"{Path}/{todo.Id}");
 
         public static void Map(WebApplication app) => app
-            .MapDelete(Path + "/{id:int}", Method)
+            .MapDelete(Path + "/{id:int}", Render)
             .WithOpenApi()
             .RequireAuthorization();
 
-        private static async Task<IResult> Method(string id, ClaimsPrincipal user, Context context)
+        private static async Task<IResult> Render(string id, ClaimsPrincipal user, Context context)
         {
             Console.WriteLine("Delete");
 
@@ -22,7 +22,7 @@ public static partial class Todo
 
             var todos = await user.GetTodos(context);
 
-            return todos.Select(Render.RenderTodo).ToIResult();
+            return todos.Select(List.RenderTodo).ToIResult();
         }
     }
 }

@@ -5,7 +5,7 @@ using static HyperTextExpression.HtmlExp;
 
 public static partial class Todo
 {
-    public static class Render
+    public static class List
     {
         public static class Element
         {
@@ -13,17 +13,22 @@ public static partial class Todo
             public const string Input = "todo-input";
         }
 
+        private readonly static string Path = "/todo/list";
+
         public static void Map(WebApplication app) => app
-            .MapGet("/", async (ClaimsPrincipal user, Context context) => 
-            {
-                Console.WriteLine("Get");
-                var todos = await user.GetTodos(context);
-                return Method(user.Identity!.Name!, todos);
-            })
+            .MapGet(Path, Render)
             .WithOpenApi()
             .RequireAuthorization();
 
-        private static IResult Method(string username, IReadOnlyCollection<Record> todos) => HtmlDoc(
+        public static async Task<IResult> Render(ClaimsPrincipal user, Context context)
+        {
+            Console.WriteLine("List");
+
+            var todos = await user.GetTodos(context);
+            return Page(user.Identity!.Name!, todos).ToIResult();
+        }
+
+        private static HtmlEl Page(string username, IReadOnlyCollection<Record> todos) => HtmlDoc(
             Head(
                 ("title", "Todo App!")
             ),
@@ -59,7 +64,7 @@ public static partial class Todo
                 Htmx.HtmxScript,
                 Htmx.HtmxJsonEncScript
             )
-        ).ToIResult();
+        );
 
         public static HtmlEl RenderTodo(Record todo, int index) =>
             HtmlEl("form",

@@ -9,15 +9,15 @@ public static partial class Todo
     {
         public sealed record Command(string Id, bool Value);
 
-        private static readonly string Path = "/update-todo";
+        private static readonly string Path = "/todo/update";
         public static readonly HtmlAttribute Html = Htmx.Put(Path);
 
         public static void Map(WebApplication app) => app
-            .MapPut(Path, Method)
+            .MapPut(Path, Render)
             .WithOpenApi()
             .RequireAuthorization();
 
-        private static async Task<IResult> Method([FromBody] Command command, ClaimsPrincipal user, Context context)
+        private static async Task<IResult> Render([FromBody] Command command, ClaimsPrincipal user, Context context)
         {
             Console.WriteLine("Update");
 
@@ -25,7 +25,7 @@ public static partial class Todo
 
             var todos = await user.GetTodos(context);
 
-            return todos.Select(Render.RenderTodo).ToIResult();
+            return todos.Select(List.RenderTodo).ToIResult();
         }
     }
 }

@@ -11,7 +11,7 @@ public static partial class Todo
 
     public static void Map(WebApplication app)
     {
-        Render.Map(app);
+        List.Map(app);
         Add.Map(app);
         Update.Map(app);
         Delete.Map(app);        
