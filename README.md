@@ -23,7 +23,6 @@ Wszystkie endpointy API powinny być dostępne przy użyciu standardu OpenApi.
 Odbiorcami są ludzie potrzebujący aplikacji do tworzenia listy zadań w przeglądarce.
 
 
-
 ## Technologie
 
 ### Frontend
@@ -35,6 +34,9 @@ Odbiorcami są ludzie potrzebujący aplikacji do tworzenia listy zadań w przegl
     - Sqlite
     - OpenApi
     - EntityFramework.Identity
+### Infrastructure
+    - Azure App Service
+    - GitHub
 
 ## Testy
 
@@ -46,6 +48,13 @@ Odbiorcami są ludzie potrzebujący aplikacji do tworzenia listy zadań w przegl
 
 Wyzwaniem było stworzenie projektu z użyciem HTMXa, który nie jest jeszcze popularny wśród społeczności .Net,
 aby to osiągnąć musiałem napisać sporo dodatkowych funkcjonalności.
+
+## Uruchomienie
+
+- Aplikacja wymaga zainstalowanego .Net Sdk 8.0 [Link](https://dotnet.microsoft.com/en-us/download/dotnet/8.0).
+- Komenda dotnet run w folderze src/Host uruchamia aplikacje.
+- Komenda dotnet test w folderze src uruchamia testy aplikacji. 
+
 
 ## Schematy
 
