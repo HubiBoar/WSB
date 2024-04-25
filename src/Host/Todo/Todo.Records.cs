@@ -35,9 +35,12 @@ public static partial class Todo
 
     public static async Task UpdateTodo(this ClaimsPrincipal user, Context context, string id, bool done)
     {
-        var record = await context.Todos.FirstAsync(x => x.Id == id);
+        var record = await context.Todos
+            .AsNoTracking()
+            .FirstAsync(x => x.Id == id);
 
-        context.Todos.Update(record with {
+        context.Todos.Update(record with 
+        {
             Done = done
         });
 

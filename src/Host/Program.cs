@@ -3,7 +3,8 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(opt => 
 {
-    opt.CustomSchemaIds(x => x.FullName);
+    var schemaHelper = new SwaggerSchemaIdHelper();
+    opt.CustomSchemaIds(schemaHelper.GetSchemaId);
 });
 
 Identity.Register(builder.Services, DataBase.Get(builder.Configuration, "Identity"));

@@ -43,6 +43,15 @@ public static partial class Identity
         .WithOpenApi()
         .AllowAnonymous();
 
+        app.MapGet("/refresh", (HttpContext context) =>
+        {
+            context.Response.Headers.Append("HX-Refresh", "true");
+
+            return Results.Ok();
+        })
+        .WithOpenApi()
+        .AllowAnonymous();
+
         using var scope = app.Services.CreateScope();
         using var context = scope.ServiceProvider.GetRequiredService<Context>();
     
@@ -85,18 +94,22 @@ public static partial class Identity
                                 Attrs(
                                     Htmx.Post("/identity/login"),
                                     Htmx.Ext("json-enc"),
-                                    Htmx.OnAfterRequest($"(document.getElementById('{Element.LoginInput}').value = 'Refresh')"),
-                                    Htmx.OnAfterRequest($"(document.getElementById('{Element.PasswordInput}').value = '')")
+                                    Htmx.OnAfterRequest($"htmx.trigger('#refresh','click')")
                                 ),
                                 "Login"),
                             ("button",
                                 Attrs(
                                     Htmx.Post("/identity/register"),
                                     Htmx.Ext("json-enc"),
-                                    Htmx.OnAfterRequest($"(document.getElementById('{Element.LoginInput}').value = 'Refresh and Login')"),
-                                    Htmx.OnAfterRequest($"(document.getElementById('{Element.PasswordInput}').value = '')")
+                                    Htmx.OnAfterRequest($"htmx.trigger('#refresh','click')")
                                 ),
-                                "Register")
+                                "Register"),
+                            Div(
+                                Attrs(
+                                    ("id", "refresh"),
+                                    ("hx-trigger", "click"),
+                                    Htmx.Get("/refresh")
+                                ))
                         )
                     )
                 ),
