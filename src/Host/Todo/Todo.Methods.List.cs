@@ -29,47 +29,82 @@ public static partial class Todo
         }
 
         private static HtmlEl Page(string username, IReadOnlyCollection<Record> todos) => HtmlDoc(
-            Head(
+            Head
+            (
                 ("title", "Todo App!")
             ),
-            Body(
-                Div(
-                    Attrs("style", "max-width: 800px; margin: auto; margin-bottom: 5rem;"),
-                    ("h2", $"ToDo list for {username}"),
-                    Div(
-                        Attrs("id", Element.List),
-                        todos.Select(RenderTodo)
+            Body
+            (
+                Div
+                (
+                    Attrs
+                    (
+                        ("style", "max-width: 800px; margin: auto; margin-bottom: 5rem;"),
+                        ("class", "card bg-light")
                     ),
-                    Div(
-                        HtmlEl("form",
-                            ("h4", "Add Todo"),
-                            ("input",
-                                Attrs(
-                                    ("id", Element.Input),
-                                    ("type", "text"),
-                                    ("name", "deed")
-                                )
+                    Div
+                    (
+                        Attrs
+                        (
+                            ("class", "card-body")
+                        ),
+                        ("h2", $"ToDo list for {username}"),
+                        Div
+                        (
+                            Attrs
+                            (
+                                ("id", Element.List),
+                                ("class", "list-group")
                             ),
-                            ("button",
-                                Attrs(
-                                    Add.Html,
-                                    Htmx.Ext("json-enc"),
-                                    Htmx.TargetHash(Element.List),
-                                    Htmx.OnAfterRequest($"(document.getElementById('{Element.Input}').value = '')")
+                            todos.Select(RenderTodo)
+                        ),
+                        Div
+                        (
+                            HtmlEl
+                            ("form",
+                                ("h4", "Add Todo"),
+                                ("input",
+                                    Attrs
+                                    (
+                                        ("id", Element.Input),
+                                        ("type", "text"),
+                                        ("name", "deed")
+                                    )
                                 ),
-                                "add")
+                                ("button",
+                                    Attrs
+                                    (
+                                        Add.Html,
+                                        Htmx.Ext("json-enc"),
+                                        Htmx.TargetHash(Element.List),
+                                        Htmx.OnAfterRequest($"(document.getElementById('{Element.Input}').value = '')")
+                                    ),
+                                    "add"
+                                )
+                            )
                         )
                     )
                 ),
                 Htmx.HtmxScript,
-                Htmx.HtmxJsonEncScript
+                Htmx.HtmxJsonEncScript,
+                Htmx.BootstrapCSS
             )
         );
 
         public static HtmlEl RenderTodo(Record todo, int index) =>
-            HtmlEl("form",
+            HtmlEl
+            ("button",
+                Attrs
+                (
+                    ("type", "checkbox"),
+                    todo.Done ? "checked" : "",
+                    Update.Html,
+                    Htmx.Ext("json-enc"),
+                    Htmx.TargetHash(Element.List)
+                ),
                 ("input",
-                    Attrs(
+                    Attrs
+                    (
                         ("type", "checkbox"),
                         todo.Done ? "checked" : "",
                         Update.Html,
@@ -77,15 +112,40 @@ public static partial class Todo
                         Htmx.TargetHash(Element.List)
                     )
                 ),
-                ("input", Attrs(("type", "hidden"), ("name", "id"), ("value", todo.Id))),
-                ("input", Attrs(("type", "hidden"), ("name", "value"), ("value", !todo.Done))),
-                ("input", Attrs(("type", "hidden"), ("name", "pos"), ("value", index))),
+                ("input",
+                    Attrs
+                    (
+                        ("type", "hidden"),
+                        ("name", "id"),
+                        ("value", todo.Id)
+                    )
+                ),
+                ("input",
+                    Attrs
+                    (
+                        ("type", "hidden"),
+                        ("name", "value"),
+                        ("value", !todo.Done)
+                    )
+                ),
+                ("input",
+                    Attrs
+                    (
+                        ("type", "hidden"),
+                        ("name", "pos"),
+                        ("value", index)
+                    )
+                ),
                 ("label",
-                    Attrs("style", todo.Done ? "text-decoration: line-through;" : ""),
+                    Attrs
+                    (
+                        ("style", todo.Done ? "text-decoration: line-through;" : "")
+                    ),
                     todo.Deed
                 ),
                 ("a",
-                    Attrs(
+                    Attrs
+                    (
                         Delete.Html(todo),
                         Htmx.TargetHash(Element.List)
                     ),
