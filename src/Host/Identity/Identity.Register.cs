@@ -64,57 +64,124 @@ public static partial class Identity
         {
             public const string LoginInput = "input-login";
             public const string PasswordInput = "input-password";
+            public const string CheckInput = "input-check";
         }
 
         public static IResult Render() => HtmlDoc(
-            Head(
+            Head
+            (
                 ("title", "Login page!")
             ),
-            Body(
-                Div(
-                    Attrs("style", "max-width: 800px; margin: auto; margin-bottom: 5rem;"),
-                    Div(
-                        HtmlEl("form",
-                            ("h4", "Login or Register"),
-                            ("input",
-                                Attrs(
-                                    ("id", Element.LoginInput),
-                                    ("type", "text"),
-                                    ("name", "email")
+            Body
+            (
+                Div
+                (
+                    Attrs
+                    (
+                        ("style", "max-width: 800px; margin: auto; margin-bottom: 5rem;"),
+                        ("class", "card bg-light")
+                    ),
+                    Div
+                    (
+                        Attrs
+                        (
+                            ("class", "card-body")
+                        ),
+                        HtmlEl
+                        ("form",
+                            Div
+                            (
+                                Attrs
+                                (
+                                    ("class", "mb-3")
+                                ),
+                                ("label",
+                                    Attrs
+                                    (
+                                        ("for", Element.LoginInput),
+                                        ("class", "form-label")
+                                    ),
+                                    "Email Address"),
+                                ("input",
+                                    Attrs
+                                    (
+                                        ("id", Element.LoginInput),
+                                        ("type", "email"),
+                                        ("name", "email"),
+                                        ("class", "form-control"),
+                                        ("aria-describedby", "emailHelp")
+                                    )
+                                ),
+                                Div
+                                (
+                                    Attrs
+                                    (
+                                        ("id", "emailHelp"),
+                                        ("class", "form-text")
+                                    ),
+                                    "We'll never share your email with anyone else"
                                 )
                             ),
-                            ("input",
-                                Attrs(
-                                    ("id", Element.PasswordInput),
-                                    ("type", "password"),
-                                    ("name", "password")
+                            Div
+                            (
+                                Attrs
+                                (
+                                    ("class", "mb-3")
+                                ),
+                                ("label",
+                                    Attrs
+                                    (
+                                        ("for", Element.PasswordInput),
+                                        ("class", "form-label")
+                                    ),
+                                    "Password"),
+                                ("input",
+                                    Attrs
+                                    (
+                                        ("id", Element.PasswordInput),
+                                        ("type", "password"),
+                                        ("name", "password"),
+                                        ("class", "form-control")
+                                    )
                                 )
                             ),
                             ("button",
-                                Attrs(
+                                Attrs
+                                (
+                                    ("type", "submit"),
+                                    ("class", "btn btn-primary"),
                                     Htmx.Post("/identity/login"),
                                     Htmx.Ext("json-enc"),
                                     Htmx.OnAfterRequest($"htmx.trigger('#refresh','click')")
                                 ),
-                                "Login"),
+                                "Login"
+                            ),
                             ("button",
-                                Attrs(
+                                Attrs
+                                (
+                                    ("type", "submit"),
+                                    ("class", "btn btn-primary"),
                                     Htmx.Post("/identity/register"),
                                     Htmx.Ext("json-enc"),
                                     Htmx.OnAfterRequest($"htmx.trigger('#refresh','click')")
                                 ),
-                                "Register"),
-                            Div(
-                                Attrs(
+                                "Register"
+                            ),
+                            Div
+                            (
+                                Attrs
+                                (
                                     ("id", "refresh"),
                                     ("hx-trigger", "click"),
                                     Htmx.Get("/refresh")
-                                ))
+                                )
+                            )
                         )
                     )
                 ),
                 Htmx.HtmxScript,
-                Htmx.HtmxJsonEncScript
+                Htmx.HtmxJsonEncScript,
+                Htmx.BootstrapCSS
             )
         ).ToIResult();
     }

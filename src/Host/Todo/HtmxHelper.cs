@@ -16,6 +16,11 @@ public static class Htmx
         Attrs("src", "https://unpkg.com/htmx.org/dist/ext/json-enc.js")
     );
 
+    public static HtmlEl BootstrapCSS = (
+        "link",
+        Attrs("href", """https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous""")
+    );
+
     public static HtmlAttribute Get(string path)    => ("hx-get", path);
     public static HtmlAttribute Put(string path)    => ("hx-put", path);
     public static HtmlAttribute Post(string path)   => ("hx-post", path);
