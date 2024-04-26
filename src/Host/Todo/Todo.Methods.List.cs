@@ -11,6 +11,9 @@ public static partial class Todo
         {
             public const string List  = "todo-list";
             public const string Input = "todo-input";
+
+            public static string ButtonId(int index) => $"button-id-{index}";
+            public static string ButtonValue(int index) => $"button-value-{index}";
         }
 
         private readonly static string Path = "/todo/list";
@@ -49,6 +52,25 @@ public static partial class Todo
                             ("class", "card-body")
                         ),
                         ("h2", $"ToDo list for {username}"),
+                        ("button",
+                            Attrs
+                            (
+                                ("class", "btn btn-danger btn-sm"),
+                                Htmx.Post("/identity/logout"),
+                                Htmx.Ext("json-enc"),
+                                Htmx.OnAfterRequest($"htmx.trigger('#refresh','click')")
+                            ),
+                            "Logout"
+                        ),
+                        // Div
+                        // (
+                        //     Attrs
+                        //     (
+                        //         ("id", "refresh"),
+                        //         ("hx-trigger", "click"),
+                        //         Htmx.Get("/refresh")
+                        //     )
+                        // ),
                         Div
                         (
                             Attrs
@@ -74,12 +96,14 @@ public static partial class Todo
                                 ("button",
                                     Attrs
                                     (
+                                        ("type", "submit"),
+                                        ("class", "btn btn-success btn-sm"),
                                         Add.Html,
                                         Htmx.Ext("json-enc"),
                                         Htmx.TargetHash(Element.List),
                                         Htmx.OnAfterRequest($"(document.getElementById('{Element.Input}').value = '')")
                                     ),
-                                    "add"
+                                    "Add"
                                 )
                             )
                         )
@@ -92,64 +116,60 @@ public static partial class Todo
         );
 
         public static HtmlEl RenderTodo(Record todo, int index) =>
-            HtmlEl
-            ("button",
+            Div
+            (
                 Attrs
                 (
-                    ("type", "checkbox"),
-                    todo.Done ? "checked" : "",
-                    Update.Html,
-                    Htmx.Ext("json-enc"),
-                    Htmx.TargetHash(Element.List)
+                    ("class", "list-group-item")
                 ),
-                ("input",
+                Div
+                (
                     Attrs
                     (
-                        ("type", "checkbox"),
-                        todo.Done ? "checked" : "",
-                        Update.Html,
-                        Htmx.Ext("json-enc"),
-                        Htmx.TargetHash(Element.List)
-                    )
-                ),
-                ("input",
-                    Attrs
-                    (
-                        ("type", "hidden"),
-                        ("name", "id"),
-                        ("value", todo.Id)
-                    )
-                ),
-                ("input",
-                    Attrs
-                    (
-                        ("type", "hidden"),
-                        ("name", "value"),
-                        ("value", !todo.Done)
-                    )
-                ),
-                ("input",
-                    Attrs
-                    (
-                        ("type", "hidden"),
-                        ("name", "pos"),
-                        ("value", index)
-                    )
-                ),
-                ("label",
-                    Attrs
-                    (
-                        ("style", todo.Done ? "text-decoration: line-through;" : "")
+                        ("class", "btn-group d-flex"),
+                        ("role", "group")
                     ),
-                    todo.Deed
-                ),
-                ("a",
-                    Attrs
-                    (
-                        Delete.Html(todo),
-                        Htmx.TargetHash(Element.List)
-                    ),
-                    "Delete"
+                        ("button",
+                            Attrs
+                            (
+                                ("class", todo.Done ? "btn btn-primary w-100" : "btn btn-outline-primary w-100"),
+                                ("type", "button"),
+                                Update.Html,
+                                ("hx-include", $"#{Element.ButtonId(index)}, #{Element.ButtonValue(index)}"),
+                                Htmx.Ext("json-enc"),
+                                Htmx.TargetHash(Element.List)
+                            ),
+                                todo.Deed
+                        ),
+                        ("button",
+                            Attrs
+                            (
+                                ("class", "btn btn-danger w-50"),
+                                ("type", "button"),
+                                ("hx-include", $"#{Element.ButtonId(index)}"),
+                                Delete.Html(todo),
+                                Htmx.TargetHash(Element.List)
+                            ),
+                                "Delete"
+                        ),
+                        ("input",
+                            Attrs
+                            (
+                                ("type", "hidden"),
+                                ("id", Element.ButtonId(index)),
+                                ("name", "id"),
+                                ("value", todo.Id)
+                            )
+                        ),
+                        ("input",
+                            Attrs
+                            (
+                                ("type", "hidden"),
+                                ("id", Element.ButtonValue(index)),
+                                ("name", "value"),
+                                ("value", !todo.Done)
+                            )
+                        )
                 )
             );
     }

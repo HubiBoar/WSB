@@ -1,11 +1,34 @@
 using System.Security.Claims;
 using HyperTextExpression.AspNetCore;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using static HyperTextExpression.HtmlExp;
+
 
 public static partial class Identity
 {
+    public sealed class CustomSignInManager : SignInManager<User>
+    {
+        public CustomSignInManager(
+            UserManager<User> userManager,
+            IHttpContextAccessor contextAccessor,
+            IUserClaimsPrincipalFactory<User> claimsFactory,
+            IOptions<IdentityOptions> optionsAccessor,
+            ILogger<SignInManager<User>> logger,
+            IAuthenticationSchemeProvider schemes,
+            IUserConfirmation<User> confirmation)
+            : base(userManager, contextAccessor, claimsFactory, optionsAccessor, logger, schemes, confirmation)
+        {
+        }
+
+        public override async Task SignOutAsync()
+        {    
+            await Context.SignOutAsync(IdentityConstants.BearerScheme);
+        }
+    }
+
     public static void Register(IServiceCollection services, Action<DbContextOptionsBuilder> dbOptions)
     {
         services.AddAuthentication()
@@ -16,7 +39,8 @@ public static partial class Identity
 
         services.AddIdentityCore<User>()
             .AddEntityFrameworkStores<Context>()
-            .AddApiEndpoints();
+            .AddApiEndpoints()
+            .AddSignInManager<CustomSignInManager>();
     }
 
     public static void Map(WebApplication app)
@@ -24,6 +48,15 @@ public static partial class Identity
         app
             .MapGroup("identity/")
             .MapIdentityApi<User>();
+
+        app.MapPost("identity/logout", async (SignInManager<User> signInManager, HttpContext context) => 
+        {
+            await signInManager.SignOutAsync();
+
+            context.Response.Headers.Append("HX-Refresh", "true");
+
+            return Results.Ok();
+        });
 
         app.MapGet("/", async (ClaimsPrincipal user, Todo.Context context) =>
         {
@@ -119,7 +152,7 @@ public static partial class Identity
                                         ("id", "emailHelp"),
                                         ("class", "form-text")
                                     ),
-                                    "We'll never share your email with anyone else"
+                                    "hubibubi@gmail.com"
                                 )
                             ),
                             Div
@@ -143,13 +176,22 @@ public static partial class Identity
                                         ("name", "password"),
                                         ("class", "form-control")
                                     )
+                                ),
+                                Div
+                                (
+                                    Attrs
+                                    (
+                                        ("id", "passwordHelp"),
+                                        ("class", "form-text")
+                                    ),
+                                    "Test!1"
                                 )
                             ),
                             ("button",
                                 Attrs
                                 (
                                     ("type", "submit"),
-                                    ("class", "btn btn-primary"),
+                                    ("class", "btn btn-success"),
                                     Htmx.Post("/identity/login"),
                                     Htmx.Ext("json-enc"),
                                     Htmx.OnAfterRequest($"htmx.trigger('#refresh','click')")

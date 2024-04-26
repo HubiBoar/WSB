@@ -10,7 +10,7 @@ public static partial class Todo
         public static HtmlAttribute Html(Record todo) => Htmx.Delete($"{Path}/{todo.Id}");
 
         public static void Map(WebApplication app) => app
-            .MapDelete(Path + "/{id:int}", Render)
+            .MapDelete(Path + "/{id}", Render)
             .WithOpenApi()
             .RequireAuthorization();
 
