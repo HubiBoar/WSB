@@ -62,15 +62,6 @@ public static partial class Todo
                             ),
                             "Logout"
                         ),
-                        // Div
-                        // (
-                        //     Attrs
-                        //     (
-                        //         ("id", "refresh"),
-                        //         ("hx-trigger", "click"),
-                        //         Htmx.Get("/refresh")
-                        //     )
-                        // ),
                         Div
                         (
                             Attrs

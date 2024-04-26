@@ -14,7 +14,7 @@ Użytkownik powinien móc edytować liste poprzez dodawanie nowych zadań, usuwa
 ## Wymagania
 
 Użytkownicy powinni być trzymani w Bazie danych (aktualnie Sqlite) wraz ze swoimi danymi i listami zadań.
-Lista zadań powinna na bieżąco aktualizować sie w bazie danych i być widoczna tylko dla aktualnie zalogowanego użytkownika.
+Lista zadań powinna się na bieżąco aktualizować w bazie danych i być widoczna tylko dla aktualnie zalogowanego użytkownika.
 Sesja użytkownika powinna być zapisana w formie Cookies.
 Wszystkie endpointy API powinny być dostępne przy użyciu standardu OpenApi pod endpointem **/swagger**.
 
