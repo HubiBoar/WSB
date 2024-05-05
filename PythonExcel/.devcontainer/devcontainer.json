@@ -1,5 +1,5 @@
 {
-	"name": "Ubuntu",
+	"name": "Pandas",
 	"dockerComposeFile": "docker-compose.yml",
 	"service": "devcontainer",
 	"workspaceFolder": "/workspaces/${localWorkspaceFolderBasename}",
@@ -7,7 +7,7 @@
 	"customizations": {
 		"vscode": {
 			"extensions": [
-				"ms-dotnettools.csharp",
+				"ms-python.debugpy",
 				"ms-azuretools.vscode-docker",
 				"yzhang.markdown-all-in-one",
 				"redhat.vscode-yaml",
@@ -16,11 +16,8 @@
 				"vscodevim.vim",
 				"kevin-kwong.vscode-autohide-keyboard",
 				"fabiospampinato.vscode-terminals",
-				"eamodio.gitlens",
-				"Postman.postman-for-vscode",
-				"sleistner.vscode-fileutils",
-				"patbenatar.advanced-new-file",
-				"qwtel.sqlite-viewer"
+				"rangav.vscode-thunder-client",
+				"GrapeCity.gc-excelviewer"
 			]
 		}
 	}

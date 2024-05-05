@@ -1,9 +1,9 @@
 {
-	"name": "Ubuntu",
+	"name": "C#",
 	"dockerComposeFile": "docker-compose.yml",
 	"service": "devcontainer",
 	"workspaceFolder": "/workspaces/${localWorkspaceFolderBasename}",
-	"postStartCommand": "chmod -R 400 ~/.ssh && gh auth login --with-token < ~/.ssh/.githubtoken",
+	"postStartCommand": "dotnet restore ./src && chmod -R 400 ~/.ssh && gh auth login --with-token < ~/.ssh/.githubtoken",
 	"customizations": {
 		"vscode": {
 			"extensions": [

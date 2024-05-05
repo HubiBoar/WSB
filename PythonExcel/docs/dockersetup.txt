@@ -1,0 +1,4 @@
+apt-get install pip -y
+
+pip install pandas
+pip install openpyxl
