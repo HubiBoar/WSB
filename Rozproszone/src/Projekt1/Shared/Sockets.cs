@@ -58,12 +58,12 @@ public static partial class Sockets
 
         Console.WriteLine($"Message Rciv :: '[{command}]' :: '{payload}'");
 
-        return new Message(Enum.Parse<Command>(command), payload);
+        return new Message(command, payload);
     }
 
     public static async Task SendMessage(this Socket socket, Message message)
     {
-        var command  = $"[{Enum.GetName(message.Command)}]";
+        var command  = $"[{message.Command}]";
         var formated = $"{command}{message.Payload}";
         var encoded  = Encoding.UTF8.GetBytes(formated);
 

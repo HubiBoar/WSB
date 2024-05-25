@@ -1,25 +1,16 @@
 ﻿//Server
-using Shared;
+using Server.Public;
 
 Console.WriteLine("Server :: Hello, World!");
 
-var accounts = Account.DataBase.CreateWithTestUsers();
+var dataBase = Server.Account.DataBase.CreateWithTestUsers();
 
-using var server = await Sockets.CreateServer();
-
-while (true)
-{
-    var message = await server.RecieveMessage();
-
-    var response = message.Command switch
-    {
-        Sockets.Command.Start => Sockets.Message.StartOk,
-        _                     => Sockets.Message.Unknown,
-    };
-
-    await server.SendMessage(response);
-
-    break;
-}
-
-server.ShutdownBoth();
+await Logic.OnServer
+(
+    (server, message) => Logic.Login.OnServer(server, message, dataBase),
+    (server, message) => Logic.GetInfo.OnServer(server, message, dataBase),
+    (server, message) => Logic.Deposit.OnServer(server, message, dataBase),
+    (server, message) => Logic.Withdraw.OnServer(server, message, dataBase),
+    (server, message) => Logic.Transfer.OnServer(server, message, dataBase),
+    (server, message) => Logic.EditInfo.OnServer(server, message, dataBase)
+);

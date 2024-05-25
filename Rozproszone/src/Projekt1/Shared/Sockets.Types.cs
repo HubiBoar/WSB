@@ -2,29 +2,22 @@ namespace Shared;
 
 public static partial class Sockets
 {
-    public enum Command
-    {
-        Start,
-        StartOk,
-        Unknown
-    }
-
     public sealed record Message
     {
-        public static readonly Message Start   = new (Command.Start);
-        public static readonly Message StartOk = new (Command.StartOk);
-        public static readonly Message Unknown = new (Command.Unknown);
+        public static readonly Message Start   = new ("Start");
+        public static readonly Message StartOk = new ("StartOk");
+        public static readonly Message Unknown = new ("Unknown");
 
-        public Command Command { get; }
+        public string Command { get; }
         public string Payload { get; }
 
-        public Message(Command command, string payload)
+        public Message(string command, string payload)
         {
             Command = command;
             Payload = payload;
         }
 
-        public Message(Command command)
+        public Message(string command)
         {
             Command = command;
             Payload = string.Empty;
