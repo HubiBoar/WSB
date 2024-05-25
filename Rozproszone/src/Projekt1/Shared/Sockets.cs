@@ -6,70 +6,7 @@ namespace Shared;
 
 public static partial class Sockets
 {
-    public static Task Client(Message firstMessage, Func<Message, (Message? Response, bool Shutdown)> loop)
-    {
-        return Client(firstMessage, (msg) => Task.FromResult(loop(msg)));
-    }
-
-    public static Task Client(Func<Message, (Message? Response, bool Shutdown)> loop)
-    {
-        return Client((msg) => Task.FromResult(loop(msg)));
-    }
-
-    public static Task Server(Func<Message, (Message? Response, bool Shutdown)> loop)
-    {
-        return Server((msg) => Task.FromResult(loop(msg)));
-    }
-
-    public static async Task Client(Func<Message, Task<(Message? Response, bool Shutdown)>> loop)
-    {
-        using var client = await CreateClient();
-
-        await Loop(client, null, loop);
-    }
-
-    public static async Task Client(Message firstMessage, Func<Message, Task<(Message? Response, bool Shutdown)>> loop)
-    {
-        using var client = await CreateClient();
-
-        await Loop(client, firstMessage, loop);
-    }
-
-    public static async Task Server(Func<Message, Task<(Message? Response, bool Shutdown)>> loop)
-    {
-        using var server = await CreateServer();
-
-        await Loop(server, null, loop);
-    }
-
-    private static async Task Loop(Socket client, Message? firstMessage, Func<Message, Task<(Message? Response, bool Shutdown)>> loop)
-    {
-        if(firstMessage is not null)
-        {
-            await client.SendMessage(firstMessage);
-        }
-
-        while (true)
-        {
-            var message = await client.RecieveMessage();
-
-            var (response, shutdown) = await loop(message);
-
-            if(response is not null)
-            {
-                await client.SendMessage(response);
-            }
-
-            if(shutdown)
-            {
-                break;
-            }
-        }
-
-        client.Shutdown(SocketShutdown.Both);
-    }
-
-    private static async Task<Socket> CreateClient()
+    public static async Task<Socket> CreateClient()
     {
         var (client, endpoint) = await CreateSocket();
 
@@ -78,7 +15,7 @@ public static partial class Sockets
         return client;
     }
 
-    private static async Task<Socket> CreateServer()
+    public static async Task<Socket> CreateServer()
     {
         var (server, endpoint) = await CreateSocket();
 
@@ -109,7 +46,7 @@ public static partial class Sockets
         return (client, endpoint);
     }
 
-    private static async Task<Message> RecieveMessage(this Socket client)
+    public static async Task<Message> RecieveMessage(this Socket client)
     {
         var buffer    = new byte[1_024];
         var received  = await client.ReceiveAsync(buffer, SocketFlags.None);
@@ -124,7 +61,7 @@ public static partial class Sockets
         return new Message(Enum.Parse<Command>(command), payload);
     }
 
-    private static async Task SendMessage(this Socket socket, Message message)
+    public static async Task SendMessage(this Socket socket, Message message)
     {
         var command  = $"[{Enum.GetName(message.Command)}]";
         var formated = $"{command}{message.Payload}";
@@ -133,5 +70,10 @@ public static partial class Sockets
         Console.WriteLine($"Message Send :: '{command}' :: '{message.Payload}'");
 
         await socket.SendAsync(encoded, 0);
+    }
+
+    public static void ShutdownBoth(this Socket socket)
+    {
+        socket.Shutdown(SocketShutdown.Both);
     }
 }

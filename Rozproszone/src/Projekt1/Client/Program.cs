@@ -1,19 +1,20 @@
 ﻿//Client
 using Shared;
 
-Console.WriteLine("Hello, World!");
+Console.WriteLine("Client :: Hello, World!");
 
-await Sockets.Client
-(
-    Sockets.Message.Start,
-    (message) => 
+using var client = await Sockets.CreateClient();
+
+while (true)
+{
+    await client.SendMessage(Sockets.Message.Start);
+
+    var message = await client.RecieveMessage();
+
+    if(message.Command == Sockets.Command.StartOk)
     {
-        var response = message.Command switch
-        {
-            Sockets.Command.StartOk => null,
-            _                       => Sockets.Message.Unknown,
-        };
-
-        return (response, Shutdown: true);
+        break;
     }
-);
+}
+
+client.ShutdownBoth();
