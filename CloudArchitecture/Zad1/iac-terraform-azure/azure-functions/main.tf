@@ -31,7 +31,6 @@ resource "azurerm_linux_function_app" "function" {
   site_config {}
 }
 
-
 resource "azurerm_function_app_function" "function" {
   name            = var.function_app_function_name
   function_app_id = azurerm_linux_function_app.function.id

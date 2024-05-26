@@ -1,5 +1,5 @@
 {
-	"name": "Ubuntu",
+	"name": "Terraform",
 	"dockerComposeFile": "docker-compose.yml",
 	"service": "devcontainer",
 	"workspaceFolder": "/workspaces/${localWorkspaceFolderBasename}",
@@ -7,7 +7,6 @@
 	"customizations": {
 		"vscode": {
 			"extensions": [
-				"ms-dotnettools.csharp",
 				"ms-azuretools.vscode-docker",
 				"yzhang.markdown-all-in-one",
 				"redhat.vscode-yaml",
@@ -20,7 +19,7 @@
 				"Postman.postman-for-vscode",
 				"sleistner.vscode-fileutils",
 				"patbenatar.advanced-new-file",
-				"qwtel.sqlite-viewer",
+				"hoovercj.vscode-settings-cycler",
 				"HashiCorp.terraform"
 			]
 		}
