@@ -32,24 +32,16 @@ public static partial class Logic
 
                 await socket.SendMessage(request);
 
-                while(true)
+                var response = await socket.TryRecieveMessage<Response>();
+
+                Console.WriteLine($"Login Result: {response.Message}");
+
+                if(response.Success == false)
                 {
-                    var (success, response) = await socket.TryRecieveMessage<Response>();
-
-                    if(success == false)
-                    {
-                        continue;
-                    }
-
-                    Console.WriteLine($"Login Result: {response}");
-
-                    if(success)
-                    {
-                        return response.Token;
-                    }
-
-                    break;
+                    continue;
                 }
+
+                return response.Token;
             }
         }
 
@@ -60,13 +52,25 @@ public static partial class Logic
             Server.Account.DataBase dataBase
         )
         {
+            Console.WriteLine("OnServer");
+
             var (login, password) = message;
 
-            var result = Server.Account.LoggedIn.TryLogin(dataBase, login, password, out var loggedIn);
+            var (status, resultMessage) = Server.Account.LoggedIn.TryLogin(dataBase, login, password, out var loggedIn);
 
-            var token = loggedIn.LoginToken;
+            if(status == true)
+            {
+                var token = loggedIn.LoginToken;
 
-            var response = new Response(result.status, result.message, token);
+                var resp = new Response(status, resultMessage, token);
+
+                Console.WriteLine(resp.Message);
+                await socket.SendMessage(resp);
+
+                return;
+            }
+
+            var response = new Response(status, resultMessage, null!);
 
             await socket.SendMessage(response);
         }

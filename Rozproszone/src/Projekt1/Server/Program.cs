@@ -7,10 +7,10 @@ var dataBase = Server.Account.DataBase.CreateWithTestUsers();
 
 await Logic.OnServer
 (
-    (server, message) => Logic.Login.OnServer(server, message, dataBase),
-    (server, message) => Logic.GetInfo.OnServer(server, message, dataBase),
-    (server, message) => Logic.Deposit.OnServer(server, message, dataBase),
-    (server, message) => Logic.Withdraw.OnServer(server, message, dataBase),
-    (server, message) => Logic.Transfer.OnServer(server, message, dataBase),
-    (server, message) => Logic.EditInfo.OnServer(server, message, dataBase)
+    Logic.GetMethod<Logic.Login.Request>((server, message)    => Logic.Login.OnServer(server, message, dataBase)),
+    Logic.GetMethod<Logic.GetInfo.Request>((server, message)  => Logic.GetInfo.OnServer(server, message, dataBase)),
+    Logic.GetMethod<Logic.Deposit.Request>((server, message)  => Logic.Deposit.OnServer(server, message, dataBase)),
+    Logic.GetMethod<Logic.Withdraw.Request>((server, message) => Logic.Withdraw.OnServer(server, message, dataBase)),
+    Logic.GetMethod<Logic.Transfer.Request>((server, message) => Logic.Transfer.OnServer(server, message, dataBase)),
+    Logic.GetMethod<Logic.EditInfo.Request>((server, message) => Logic.EditInfo.OnServer(server, message, dataBase))
 );

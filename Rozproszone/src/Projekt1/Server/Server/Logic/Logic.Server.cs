@@ -1,3 +1,5 @@
+using System.Diagnostics;
+using System.Text.Json;
 using Shared;
 
 namespace Server.Public;
@@ -9,7 +11,12 @@ public static partial class Logic
     {
         return new Method(T.Command, (handler, msg) => 
         {
-            return func(handler, (T)msg);
+            Console.WriteLine(T.Command + "RUNNING");
+            var json = JsonSerializer.Serialize(msg);
+            var casted = JsonSerializer.Deserialize<T>(json);
+            Console.WriteLine(T.Command + "Casted");
+
+            return func(handler, casted!);
         });
     }
 
@@ -37,15 +44,33 @@ public static partial class Logic
         {
             while (true)
             {
-                var message = await handler.RecieveMessage();
-
-                foreach(var method in methods)
+                try
                 {
-                    if(method.Command == message.Command)
+                    var (command, payload) = await handler.RecieveMessage();
+
+                    foreach(var method in methods)
                     {
-                       await method.Func(handler, message.Payload);
-                       break; 
+                        Console.WriteLine(method.Command);
+                        Console.WriteLine(payload);
+                        if(method.Command == command)
+                        {
+                            try
+                            {
+                                await method.Func(handler, payload);
+                                break;
+                            }
+                            catch (Exception ex)
+                            {
+                                Console.WriteLine(ex);
+                                break;
+                            }
+                        }
                     }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex);
+                    throw;
                 }
             }
         }

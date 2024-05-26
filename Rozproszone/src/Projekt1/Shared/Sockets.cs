@@ -59,44 +59,63 @@ public static partial class Sockets
     private sealed record MessageCommand<TMessage>(string Command, TMessage Payload)
         where TMessage : IMessage;
 
-    public static async Task<(bool Success, TMessage Message)> TryRecieveMessage<TMessage>(this Handler client)
+    public static async Task<TMessage> TryRecieveMessage<TMessage>(this Handler client)
         where TMessage : class, IMessage
     {
-        var buffer    = new byte[1_024];
-        var received  = await client.Socket.ReceiveAsync(buffer, SocketFlags.None);
-        var decodeded = Encoding.UTF8.GetString(buffer, 0, received);
-
-        var message = JsonSerializer.Deserialize<MessageCommand>(decodeded)!;
-
-        if(client.Debug)
+        try
         {
-            Console.WriteLine($"Message Rciv :: '{decodeded}'");
-        }
+            while(true)
+            {
+                var buffer    = new byte[1_024];
+                var received  = await client.Socket.ReceiveAsync(buffer, SocketFlags.None);
+                var decodeded = Encoding.UTF8.GetString(buffer, 0, received);
 
-        if(message.Command != TMessage.Command)
+                var message = JsonSerializer.Deserialize<MessageCommand>(decodeded)!;
+
+                if(client.Debug)
+                {
+                    Console.WriteLine($"Message Rciv :: '{decodeded}'");
+                }
+
+                if(message.Command != TMessage.Command)
+                {
+                    continue;
+                }
+
+                var deserialized = JsonSerializer.Deserialize<MessageCommand<TMessage>>(decodeded)!;
+
+                return deserialized.Payload;
+            }
+        }
+        catch (Exception ex)
         {
-            return (false, null!);
+            Console.WriteLine(ex);
+            throw;
         }
-
-        var deserialized = JsonSerializer.Deserialize<MessageCommand<TMessage>>(decodeded)!;
-
-        return (true, deserialized.Payload);
     }
 
     public static async Task<(string Command, object Payload)> RecieveMessage(this Handler client)
     {
-        var buffer    = new byte[1_024];
-        var received  = await client.Socket.ReceiveAsync(buffer, SocketFlags.None);
-        var decodeded = Encoding.UTF8.GetString(buffer, 0, received);
-
-        var message = JsonSerializer.Deserialize<MessageCommandPayload>(decodeded)!;
-
-        if(client.Debug)
+        try
         {
-            Console.WriteLine($"Message Rciv :: '{decodeded}'");
-        }
+            var buffer    = new byte[1_024];
+            var received  = await client.Socket.ReceiveAsync(buffer, SocketFlags.None);
+            var decodeded = Encoding.UTF8.GetString(buffer, 0, received);
 
-        return (message.Command, message.Payload);
+            var message = JsonSerializer.Deserialize<MessageCommandPayload>(decodeded)!;
+
+            if(client.Debug)
+            {
+                Console.WriteLine($"Message Rciv :: '{decodeded}'");
+            }
+
+            return (message.Command, message.Payload);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex);
+            throw;
+        }
     }
 
     public static async Task SendMessage<TMessage>(this Handler socket, TMessage message)
