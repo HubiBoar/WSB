@@ -7,73 +7,73 @@ public static partial class Logic
 {
     public static class Transfer
     {
-        private sealed record Request(string ToLogin, int Amount);
-        private sealed record Response(bool Success, string Message, int Balance);
+        public sealed record Request(Sockets.Token Token, string ToLogin, int Amount) : Sockets.ITokenMessage
+        {
+            public static string Command => "Transfer";
+        }
 
-        private const string Send = "Transfer";
-        private const string Resp = "TransferResp";
+        private sealed record Response(bool Success, string Message, int Balance) : Sockets.IMessage
+        {
+            public static string Command => "TransferResp";
+        }
+
 
         public static async Task<(bool Success, int Balance)> OnClient
         (
-            Socket socket,
-            Token token,
+            Sockets.Handler socket,
+            Sockets.Token token,
             string toLogin,
             int amount
         )
         {
-            var message = PayloadWithToken<Request>.ToMessage(Send, token, new Request(toLogin, amount));
+            var message = new Request(token, toLogin, amount);
 
             await socket.SendMessage(message);
 
             while(true)
             {
-                var response = await socket.RecieveMessage();
+                var (success, response) = await socket.TryRecieveMessage<Response>();
 
-                if(response.Command != Resp)
+                if(success == false)
                 {
                     continue;
                 }
 
-                var result = response.GetPayload<Response>().Payload;
-
-                return (result.Success, result.Balance);
+                return (response.Success, response.Balance);
             }
         }
 
-        internal static async Task<bool> OnServer
+        internal static async Task OnServer
         (
-            Socket socket,
-            Sockets.Message message,
+            Sockets.Handler socket,
+            Request message,
             Server.Account.DataBase dataBase
         )
         {
-            if(message.Command != Send)
+
+            Server.Account.LoggedIn.TryLogin(dataBase, message.Token, out var loggedIn);
+
+            if(dataBase.Accounts.TryGetValue(message.ToLogin, out var target) == false)
             {
-                return false;
-            }
-
-            var payload = message.GetPayload<Request>();
-
-            var token = new Server.Account.Token(payload.Token.Value);
-
-            Server.Account.LoggedIn.TryLogin(dataBase, token, out var loggedIn);
-
-            if(dataBase.Accounts.TryGetValue(payload.Payload.ToLogin, out var target) == false)
-            {
-                var resp = PayloadWithToken<Response>.ToMessage(Resp, new Token(token.Value), new Response(false, "Target not found", loggedIn.Account.Balance))!;
+                var resp = new Response(false, "Target not found", loggedIn.Account.Balance);
 
                 await socket.SendMessage(resp);
 
-                return true;
+                return;
             }
 
-            var result = loggedIn.TryTransfer(target, payload.Payload.Amount);
+            if(loggedIn.TryTransfer(target, message.Amount))
+            {
+                var resp = new Response(false, "Not enough funds", loggedIn.Account.Balance);
 
-            var response = PayloadWithToken<Response>.ToMessage(Resp, new Token(token.Value), new Response(result, "Not enought founds", loggedIn.Account.Balance))!;
+                await socket.SendMessage(resp);
+
+                return;
+            }
+
+            var response = new Response(true, "Transfer Succeded", loggedIn.Account.Balance);
 
             await socket.SendMessage(response);
-
-            return true;
         }
     }
 }

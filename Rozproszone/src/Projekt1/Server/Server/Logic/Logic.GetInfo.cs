@@ -1,4 +1,3 @@
-using System.Net.Sockets;
 using Shared;
 
 namespace Server.Public;
@@ -7,59 +6,51 @@ public static partial class Logic
 {
     public static class GetInfo
     {
-        private sealed record Response(Account Account);
+        public sealed record Request(Sockets.Token Token) : Sockets.ITokenMessage
+        {
+            public static string Command => "GetInfo";
+        }
 
-        private const string Send = "GetInfo";
-        private const string Resp = "GetInfoResp";
+        private sealed record Response(Account Account) : Sockets.IMessage
+        {
+            public static string Command => "GetInfoResp";
+        }
 
         public static async Task<Account> OnClient
         (
-            Socket socket,
-            Token token
+            Sockets.Handler socket,
+            Sockets.Token token
         )
         {
-            var message = PayloadWithToken.ToMessage(Send, token);
+            var message = new Request(token);
 
             await socket.SendMessage(message);
 
             while(true)
             {
-                var response = await socket.RecieveMessage();
+                var (success, response) = await socket.TryRecieveMessage<Response>();
 
-                if(response.Command != Resp)
+                if(success == false)
                 {
                     continue;
                 }
 
-                var account = response.GetPayload<Response>().Payload.Account;
-
-                return account;
+                return response.Account;
             }
         }
 
-        internal static async Task<bool> OnServer
+        internal static async Task OnServer
         (
-            Socket socket,
-            Sockets.Message message,
+            Sockets.Handler socket,
+            Request message,
             Server.Account.DataBase dataBase
         )
         {
-            if(message.Command != Send)
-            {
-                return false;
-            }
+            Server.Account.LoggedIn.TryLogin(dataBase, message.Token, out var loggedIn);
 
-            var tokenFromPayload = message.GetToken();
-
-            var token = new Server.Account.Token(tokenFromPayload.Value);
-
-            Server.Account.LoggedIn.TryLogin(dataBase, token, out var loggedIn);
-
-            var response = PayloadWithToken<Response>.ToMessage(Resp, new Token(token.Value), new Response(new Account(loggedIn.Account)))!;
+            var response = new Response(new (loggedIn.Account));
 
             await socket.SendMessage(response);
-
-            return true;
         }
     }
 }

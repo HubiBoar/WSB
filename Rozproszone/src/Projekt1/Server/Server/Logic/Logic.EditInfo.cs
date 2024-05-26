@@ -9,63 +9,55 @@ public static partial class Logic
 
     public static class EditInfo
     {
-        private sealed record Request(string Name, string Surname);
-        private sealed record Response(Account Account);
+        public sealed record Request(Sockets.Token Token, string Name, string Surname) : Sockets.ITokenMessage
+        {
+            public static string Command => "EditInfo";
+        }
 
-        private const string Send = "EditInfo";
-        private const string Resp = "EditInfo";
+        private sealed record Response(Account Account) : Sockets.IMessage
+        {
+            public static string Command => "EditInfoResp";
+        }
 
         public static async Task<Account> OnClient
         (
-            Socket socket,
-            Token token,
+            Sockets.Handler socket,
+            Sockets.Token token,
             string name,
             string surname
         )
         {
-            var message = PayloadWithToken<Request>.ToMessage(Send, token, new Request(name, surname));
+            var message = new Request(token, name, surname);
 
             await socket.SendMessage(message);
 
             while(true)
             {
-                var response = await socket.RecieveMessage();
+                var (success, response) = await socket.TryRecieveMessage<Response>();
 
-                if(response.Command != Resp)
+                if(success == false)
                 {
                     continue;
                 }
 
-                var result = response.GetPayload<Response>().Payload;
-
-                return result.Account;
+                return response.Account;
             }
         }
 
-        internal static async Task<bool> OnServer
+        internal static async Task OnServer
         (
-            Socket socket,
-            Sockets.Message message,
+            Sockets.Handler socket,
+            Request message,
             Server.Account.DataBase dataBase
         )
         {
-            if(message.Command != Send)
-            {
-                return false;
-            }
+            Server.Account.LoggedIn.TryLogin(dataBase, message.Token, out var loggedIn);
 
-            var payload = message.GetPayload<Request>();
+            loggedIn.Account.EditUserData(message.Name, message.Surname);
 
-            var token = new Server.Account.Token(payload.Token.Value);
-
-            Server.Account.LoggedIn.TryLogin(dataBase, token, out var loggedIn);
-
-            loggedIn.Account.EditUserData(payload.Payload.Name, payload.Payload.Surname);
-            var response = PayloadWithToken<Response>.ToMessage(Resp, new Token(token.Value), new Response(new (loggedIn.Account)))!;
+            var response = new Response(new (loggedIn.Account));
 
             await socket.SendMessage(response);
-
-            return true;
         }
     }
 }

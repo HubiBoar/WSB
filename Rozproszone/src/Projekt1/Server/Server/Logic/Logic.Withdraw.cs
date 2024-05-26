@@ -1,4 +1,3 @@
-using System.Net.Sockets;
 using Shared;
 
 namespace Server.Public;
@@ -7,63 +6,54 @@ public static partial class Logic
 {
     public static class Withdraw
     {
-        private sealed record Request(int Amount);
-        private sealed record Response(bool Success, int Balance);
+        public sealed record Request(Sockets.Token Token, int Amount) : Sockets.ITokenMessage
+        {
+            public static string Command => "Withdraw";
+        }
 
-        private const string Send = "Withdraw";
-        private const string Resp = "WithdrawResp";
+        private sealed record Response(bool Success, int Balance) : Sockets.IMessage
+        {
+            public static string Command => "WithdrawResp";
+        }
 
         public static async Task<(bool Success, int Balance)> OnClient
         (
-            Socket socket,
-            Token token,
+            Sockets.Handler socket,
+            Sockets.Token token,
             int amount
         )
         {
-            var message = PayloadWithToken<Request>.ToMessage(Send, token, new Request(amount));
+            var message = new Request(token, amount);
 
             await socket.SendMessage(message);
 
             while(true)
             {
-                var response = await socket.RecieveMessage();
+                var (success, response) = await socket.TryRecieveMessage<Response>();
 
-                if(response.Command != Resp)
+                if(success == false)
                 {
                     continue;
                 }
 
-                var result = response.GetPayload<Response>().Payload;
-
-                return (result.Success, result.Balance);
+                return (response.Success, response.Balance);
             }
         }
 
-        internal static async Task<bool> OnServer
+        internal static async Task OnServer
         (
-            Socket socket,
-            Sockets.Message message,
+            Sockets.Handler socket,
+            Request message,
             Server.Account.DataBase dataBase
         )
         {
-            if(message.Command != Send)
-            {
-                return false;
-            }
+            Server.Account.LoggedIn.TryLogin(dataBase, message.Token, out var loggedIn);
 
-            var payload = message.GetPayload<Request>();
+            var result = loggedIn.TryWithdraw(message.Amount);
 
-            var token = new Server.Account.Token(payload.Token.Value);
-
-            Server.Account.LoggedIn.TryLogin(dataBase, token, out var loggedIn);
-
-            var result = loggedIn.TryWithdraw(payload.Payload.Amount);
-
-            var response = PayloadWithToken<Response>.ToMessage(Resp, new Token(token.Value), new Response(result, loggedIn.Account.Balance))!;
+            var response = new Response(result, loggedIn.Account.Balance);
 
             await socket.SendMessage(response);
-
-            return true;
         }
     }
 }

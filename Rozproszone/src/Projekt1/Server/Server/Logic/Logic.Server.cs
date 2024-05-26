@@ -1,11 +1,19 @@
-using System.Net.Sockets;
 using Shared;
 
 namespace Server.Public;
 
 public static partial class Logic
 {
-    internal delegate Task<bool> Method(Socket server, Sockets.Message message);
+    internal static Method GetMethod<T>(Func<Sockets.Handler, T, Task> func)
+        where T : Sockets.IMessage
+    {
+        return new Method(T.Command, (handler, msg) => 
+        {
+            return func(handler, (T)msg);
+        });
+    }
+
+    internal sealed record Method(string Command, Func<Sockets.Handler, object, Task> Func);
 
     internal static async Task OnServer(params Method[] methods)
     {
@@ -13,13 +21,31 @@ public static partial class Logic
 
         while (true)
         {
-            var message = await server.RecieveMessage();
-
-            foreach(var method in methods)
+            try
             {
-                if(await method(server, message))
+                var handler = await server.Socket.AcceptAsync();
+                Console.WriteLine("New connection accepted!");
+                _ = HandleConnectionAsync(new Sockets.Handler(handler, server.Debug));
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error accepting connection: {ex.Message}");
+            }
+        }
+
+        async Task HandleConnectionAsync(Sockets.Handler handler)
+        {
+            while (true)
+            {
+                var message = await handler.RecieveMessage();
+
+                foreach(var method in methods)
                 {
-                    break;
+                    if(method.Command == message.Command)
+                    {
+                       await method.Func(handler, message.Payload);
+                       break; 
+                    }
                 }
             }
         }

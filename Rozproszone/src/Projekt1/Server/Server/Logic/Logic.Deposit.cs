@@ -1,4 +1,3 @@
-using System.Net.Sockets;
 using Shared;
 
 namespace Server.Public;
@@ -7,61 +6,54 @@ public static partial class Logic
 {
     public static class Deposit
     {
-        private sealed record Request(int Amount);
-        private sealed record Response(int Balance);
+        public sealed record Request(Sockets.Token Token, int Amount) : Sockets.ITokenMessage
+        {
+            public static string Command => "Deposit";
+        }
 
-        private const string Send = "Deposit";
-        private const string Resp = "DepositResp";
+        private sealed record Response(int Balance) : Sockets.IMessage
+        {
+            public static string Command => "DepositResp";
+        }
 
         public static async Task<int> OnClient
         (
-            Socket socket,
-            Token token,
+            Sockets.Handler socket,
+            Sockets.Token token,
             int amount
         )
         {
-            var message = PayloadWithToken<Request>.ToMessage(Send, token, new Request(amount));
+            var message = new Request(token, amount);
 
             await socket.SendMessage(message);
 
             while(true)
             {
-                var response = await socket.RecieveMessage();
+                var (success, response) = await socket.TryRecieveMessage<Response>();
 
-                if(response.Command != Resp)
+                if(success == false)
                 {
                     continue;
                 }
 
-                return response.GetPayload<Response>().Payload.Balance;
+                return response.Balance;
             }
         }
 
-        internal static async Task<bool> OnServer
+        internal static async Task OnServer
         (
-            Socket socket,
-            Sockets.Message message,
+            Sockets.Handler socket,
+            Request message,
             Server.Account.DataBase dataBase
         )
         {
-            if(message.Command != Send)
-            {
-                return false;
-            }
+            Server.Account.LoggedIn.TryLogin(dataBase, message.Token, out var loggedIn);
 
-            var payload = message.GetPayload<Request>();
+            loggedIn.Account.Deposit(message.Amount);
 
-            var token = new Server.Account.Token(payload.Token.Value);
-
-            Server.Account.LoggedIn.TryLogin(dataBase, token, out var loggedIn);
-
-            loggedIn.Account.Deposit(payload.Payload.Amount);
-
-            var response = PayloadWithToken<Response>.ToMessage(Resp, new Token(token.Value), new Response(loggedIn.Account.Balance))!;
+            var response = new Response(loggedIn.Account.Balance);
 
             await socket.SendMessage(response);
-
-            return true;
         }
     }
 }

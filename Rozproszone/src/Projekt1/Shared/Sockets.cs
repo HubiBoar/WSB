@@ -1,30 +1,37 @@
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
+using System.Text.Json;
 
 namespace Shared;
 
 public static partial class Sockets
 {
-    public static async Task<Socket> CreateClient()
+    public sealed record Handler(Socket Socket, bool Debug) : IDisposable
+    {
+        public void Dispose()
+        {
+            Socket.Dispose();
+        }
+    }
+
+    public static async Task<Handler> CreateClient(bool debug = false)
     {
         var (client, endpoint) = await CreateSocket();
 
         await client.ConnectAsync(endpoint);
 
-        return client;
+        return new (client, debug);
     }
 
-    public static async Task<Socket> CreateServer()
+    public static async Task<Handler> CreateServer(bool debug = true)
     {
         var (server, endpoint) = await CreateSocket();
 
         server.Bind(endpoint);
         server.Listen(100);
 
-        var handler = await server.AcceptAsync();
-
-        return handler;
+        return new (server, debug);
     }
 
     private static async Task<(Socket Client, IPEndPoint Endpoint)> CreateSocket()
@@ -46,34 +53,65 @@ public static partial class Sockets
         return (client, endpoint);
     }
 
-    public static async Task<Message> RecieveMessage(this Socket client)
+    private sealed record MessageCommand(string Command);
+    private sealed record MessageCommandPayload(string Command, object Payload);
+
+    private sealed record MessageCommand<TMessage>(string Command, TMessage Payload)
+        where TMessage : IMessage;
+
+    public static async Task<(bool Success, TMessage Message)> TryRecieveMessage<TMessage>(this Handler client)
+        where TMessage : class, IMessage
     {
         var buffer    = new byte[1_024];
-        var received  = await client.ReceiveAsync(buffer, SocketFlags.None);
+        var received  = await client.Socket.ReceiveAsync(buffer, SocketFlags.None);
         var decodeded = Encoding.UTF8.GetString(buffer, 0, received);
 
-        var splitMessage = decodeded.Split("]");
-        var command      = splitMessage[0].Replace("[", "");
-        var payload      = splitMessage[1];
+        var message = JsonSerializer.Deserialize<MessageCommand>(decodeded)!;
 
-        Console.WriteLine($"Message Rciv :: '[{command}]' :: '{payload}'");
+        if(client.Debug)
+        {
+            Console.WriteLine($"Message Rciv :: '{decodeded}'");
+        }
 
-        return new Message(command, payload);
+        if(message.Command != TMessage.Command)
+        {
+            return (false, null!);
+        }
+
+        var deserialized = JsonSerializer.Deserialize<MessageCommand<TMessage>>(decodeded)!;
+
+        return (true, deserialized.Payload);
     }
 
-    public static async Task SendMessage(this Socket socket, Message message)
+    public static async Task<(string Command, object Payload)> RecieveMessage(this Handler client)
     {
-        var command  = $"[{message.Command}]";
-        var formated = $"{command}{message.Payload}";
-        var encoded  = Encoding.UTF8.GetBytes(formated);
+        var buffer    = new byte[1_024];
+        var received  = await client.Socket.ReceiveAsync(buffer, SocketFlags.None);
+        var decodeded = Encoding.UTF8.GetString(buffer, 0, received);
 
-        Console.WriteLine($"Message Send :: '{command}' :: '{message.Payload}'");
+        var message = JsonSerializer.Deserialize<MessageCommandPayload>(decodeded)!;
 
-        await socket.SendAsync(encoded, 0);
+        if(client.Debug)
+        {
+            Console.WriteLine($"Message Rciv :: '{decodeded}'");
+        }
+
+        return (message.Command, message.Payload);
     }
 
-    public static void ShutdownBoth(this Socket socket)
+    public static async Task SendMessage<TMessage>(this Handler socket, TMessage message)
+        where TMessage : class, IMessage
     {
-        socket.Shutdown(SocketShutdown.Both);
+        var msg = new MessageCommand<TMessage>(TMessage.Command, message);
+        var json = JsonSerializer.Serialize(msg)!;
+
+        var encoded  = Encoding.UTF8.GetBytes(json);
+
+        if(socket.Debug)
+        {
+            Console.WriteLine($"Message Send :: '{json}'");
+        }
+
+        await socket.Socket.SendAsync(encoded, 0);
     }
 }

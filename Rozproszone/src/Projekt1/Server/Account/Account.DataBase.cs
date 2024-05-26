@@ -16,8 +16,8 @@ internal sealed partial class Account
         {
             var db = new DataBase();
 
-            db.TryAddAccount("TestName", "TestSurname", "Test", "test", 10);
-            db.TryAddAccount("Test2Name", "Test2Surname", "Test2", "test", 50);
+            db.TryAddAccount("Account1", "Surname1", "User1", "test", 10);
+            db.TryAddAccount("Account2", "Surname2", "User2", "test", 50);
 
             return db;
         }

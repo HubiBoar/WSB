@@ -7,7 +7,6 @@ Console.WriteLine("Client :: Hello, World!");
 using var client = await Sockets.CreateClient();
 
 var token = await Logic.Login.OnClient(client);
-    
 
 while(true)
 {
@@ -35,7 +34,7 @@ while(true)
         Console.WriteLine($"Balance: {account.Balance}");
     }
 
-    if(command.StartsWith("Deposit"))
+    if(command == "Deposit")
     {
         Console.WriteLine();
         Console.WriteLine("<--[Input]-->");
@@ -53,7 +52,7 @@ while(true)
         Console.WriteLine($"Balance: {balance}");
     }
 
-    if(command.StartsWith("Withdraw"))
+    if(command == "Withdraw")
     {
         Console.WriteLine("<--[Input]-->");
         Console.WriteLine("Amount:");
@@ -65,11 +64,11 @@ while(true)
         Console.WriteLine();
         Console.WriteLine("<--[Output]-->");
         Console.WriteLine();
-        Console.WriteLine($"Success: {success}");
+        Console.WriteLine(success ? "Success" : "Failed");
         Console.WriteLine($"Balance: {balance}");
     }
 
-    if(command.StartsWith("Transfer"))
+    if(command == "Transfer")
     {
         Console.WriteLine();
         Console.WriteLine("<--[Input]-->");
@@ -86,11 +85,11 @@ while(true)
         Console.WriteLine();
         Console.WriteLine("<--[Output]-->");
         Console.WriteLine();
-        Console.WriteLine($"Success: {success}");
+        Console.WriteLine(success ? "Success" : "Failed");
         Console.WriteLine($"Balance: {balance}");
     }
 
-    if(command.StartsWith("EditInfo"))
+    if(command == "EditInfo")
     {
         Console.WriteLine();
         Console.WriteLine("<--[Input]-->");

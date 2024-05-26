@@ -1,4 +1,3 @@
-using System.Net.Sockets;
 using Shared;
 
 namespace Server.Public;
@@ -7,14 +6,19 @@ public static partial class Logic
 {
     public static class Login
     {
-        private sealed record Response(bool Success, string Message);
+        public sealed record Request(string Login, string Password) : Sockets.IMessage
+        {
+            public static string Command => "LoginToken";
+        }
 
-        private const string Send = "LoginToken";
-        private const string Resp = "LoginTokenResp";
+        private sealed record Response(bool Success, string Message, Sockets.Token Token) : Sockets.IMessage
+        {
+            public static string Command => "LoginTokenResp";
+        }
 
-        public static async Task<Token> OnClient
+        public static async Task<Sockets.Token> OnClient
         (
-            Socket socket
+            Sockets.Handler socket
         )
         {
             while(true)
@@ -24,28 +28,24 @@ public static partial class Logic
                 Console.WriteLine("Password");
                 var password = Console.ReadLine();
 
-                Server.Account.Token token = new (login!, password!);
+                Request request = new (login!, password!);
 
-                var message = PayloadWithToken.ToMessage(Send, new Token(token.Value));
-
-                await socket.SendMessage(message);
+                await socket.SendMessage(request);
 
                 while(true)
                 {
-                    var response = await socket.RecieveMessage();
+                    var (success, response) = await socket.TryRecieveMessage<Response>();
 
-                    if(response.Command != Resp)
+                    if(success == false)
                     {
                         continue;
                     }
 
-                    var (success, responseMessage) = response.GetPayload<Response>().Payload;
-
-                    Console.WriteLine($"Login Result: {responseMessage}");
+                    Console.WriteLine($"Login Result: {response}");
 
                     if(success)
                     {
-                        return new (token.Value);
+                        return response.Token;
                     }
 
                     break;
@@ -53,27 +53,22 @@ public static partial class Logic
             }
         }
 
-        internal static async Task<bool> OnServer
+        internal static async Task OnServer
         (
-            Socket socket,
-            Sockets.Message message,
+            Sockets.Handler socket,
+            Request message,
             Server.Account.DataBase dataBase
         )
         {
-            if(message.Command != Send)
-            {
-                return false;
-            }
+            var (login, password) = message;
 
-            var token = message.GetToken();
+            var result = Server.Account.LoggedIn.TryLogin(dataBase, login, password, out var loggedIn);
 
-            var result = Server.Account.LoggedIn.TryLogin(dataBase, new (token.Value), out var _);
+            var token = loggedIn.LoginToken;
 
-            var response = PayloadWithToken<Response>.ToMessage(Resp, token, new Response(result.status, result.message))!;
+            var response = new Response(result.status, result.message, token);
 
             await socket.SendMessage(response);
-
-            return true;
         }
     }
 }

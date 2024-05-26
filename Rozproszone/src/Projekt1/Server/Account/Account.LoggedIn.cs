@@ -1,23 +1,40 @@
+using Shared;
+
 namespace Server;
 
 internal sealed partial class Account
 {
     public sealed partial class LoggedIn
     {
-        public Token LoginToken { get; }
+        public Sockets.Token LoginToken { get; }
 
         public Account Account { get; }
 
-        private LoggedIn(Account account, Token loginToken)
+        private LoggedIn(Account account, Sockets.Token loginToken)
         {
             Account = account;
             LoginToken = loginToken;
         }
 
-        public static (bool status, string message) TryLogin(DataBase accounts, Token token, out LoggedIn loggedIn)
+        public static (bool status, string message) TryLogin
+        (
+            DataBase accounts,
+            Sockets.Token token,
+            out LoggedIn loggedIn
+        )
+        {
+            return TryLogin(accounts, token.Login, token.Password, out loggedIn);
+        }
+
+        public static (bool status, string message) TryLogin
+        (
+            DataBase accounts,
+            string login,
+            string password,
+            out LoggedIn loggedIn
+        )
         {
             loggedIn = null!;
-            var (login, password) = token;
 
             if(accounts.Accounts.TryGetValue(login, out var account) == false)
             {
@@ -29,13 +46,18 @@ internal sealed partial class Account
                 return (false, $"Invalid password for login : '{login}'");
             }
 
-            loggedIn = new LoggedIn(account, token);
+            loggedIn = new LoggedIn(account, new Sockets.Token(login, password, account.IsAdmin));
 
             return (true, $"Succesfully logged in");
         }
 
         public bool TryWithdraw(int amount)
         {
+            if(amount < 0)
+            {
+                return false;
+            }
+
             if(amount <= Account.Balance)
             {
                 Account.Balance -= amount;
@@ -47,6 +69,11 @@ internal sealed partial class Account
 
         public bool TryTransfer(Account target, int amount)
         {
+            if(amount < 0)
+            {
+                return false;
+            }
+
             if(TryWithdraw(amount))
             {
                 target.Deposit(amount);

@@ -2,25 +2,20 @@ namespace Shared;
 
 public static partial class Sockets
 {
-    public sealed record Message
+    public sealed record Token
+    (
+        string Login,
+        string Password,
+        bool IsAdmin
+    );
+
+    public interface ITokenMessage : IMessage
     {
-        public static readonly Message Start   = new ("Start");
-        public static readonly Message StartOk = new ("StartOk");
-        public static readonly Message Unknown = new ("Unknown");
+        public Token Token { get; }
+    }
 
-        public string Command { get; }
-        public string Payload { get; }
-
-        public Message(string command, string payload)
-        {
-            Command = command;
-            Payload = payload;
-        }
-
-        public Message(string command)
-        {
-            Command = command;
-            Payload = string.Empty;
-        }
+    public interface IMessage
+    {
+        public static abstract string Command { get; }
     }
 }
