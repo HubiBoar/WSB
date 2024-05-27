@@ -1,16 +1,14 @@
 ﻿//Server
 using Server.Public;
 
-Console.WriteLine("Server :: Hello, World!");
-
 var dataBase = Server.Account.DataBase.CreateWithTestUsers();
 
-await Logic.OnServer
+await Logic.Server.Run
 (
-    Logic.GetMethod<Logic.Login.Request>((server, message)    => Logic.Login.OnServer(server, message, dataBase)),
-    Logic.GetMethod<Logic.GetInfo.Request>((server, message)  => Logic.GetInfo.OnServer(server, message, dataBase)),
-    Logic.GetMethod<Logic.Deposit.Request>((server, message)  => Logic.Deposit.OnServer(server, message, dataBase)),
-    Logic.GetMethod<Logic.Withdraw.Request>((server, message) => Logic.Withdraw.OnServer(server, message, dataBase)),
-    Logic.GetMethod<Logic.Transfer.Request>((server, message) => Logic.Transfer.OnServer(server, message, dataBase)),
-    Logic.GetMethod<Logic.EditInfo.Request>((server, message) => Logic.EditInfo.OnServer(server, message, dataBase))
+    new Logic.Login.OnServer(dataBase),
+    new Logic.Info.OnServer(dataBase),
+    new Logic.Deposit.OnServer(dataBase),
+    new Logic.Withdraw.OnServer(dataBase),
+    new Logic.Transfer.OnServer(dataBase),
+    new Logic.EditInfo.OnServer(dataBase)
 );

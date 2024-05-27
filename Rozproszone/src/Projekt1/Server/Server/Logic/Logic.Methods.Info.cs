@@ -5,16 +5,16 @@ namespace Server.Public;
 
 public static partial class Logic
 {
-    public static class GetInfo
+    public static class Info
     {
         public sealed record Request(Sockets.Token Token) : Sockets.ITokenMessage
         {
-            public static string Command => "GetInfo";
+            public static string Command => "Info";
         }
 
         private sealed record Response(AccountDTO Account) : Sockets.IMessage
         {
-            public static string Command => "GetInfoResp";
+            public static string Command => "InfoResp";
         }
 
         public sealed class OnClient : Client.IHandle
@@ -30,9 +30,9 @@ public static partial class Logic
                 var (name, surname, balance, _) = await HandleLocal(socket, token);
 
                 return new StringBuilder()
-                    .Append($"Name: {name}")
-                    .Append($"Surname: {surname}")
-                    .Append($"Balance: {balance}");
+                    .AppendLine($"Name: {name}")
+                    .AppendLine($"Surname: {surname}")
+                    .AppendLine($"Balance: {balance}");
             }
 
             private static async Task<AccountDTO> HandleLocal
@@ -51,18 +51,24 @@ public static partial class Logic
             }
         }
 
-        internal static async Task OnServer
-        (
-            Sockets.Handler socket,
-            Request message,
-            Server.Account.DataBase dataBase
-        )
+
+        internal sealed class OnServer : Server.IHandle<Request>
         {
-            Server.Account.LoggedIn.TryLogin(dataBase, message.Token, out var loggedIn);
+            private readonly Account.DataBase _dataBase;
 
-            var response = new Response(new (loggedIn.Account));
+            public OnServer(Account.DataBase dataBase)
+            {
+                _dataBase = dataBase;
+            }
 
-            await socket.SendMessage(response);
+            public async Task Handle(Sockets.Handler socket, Request message)
+            {
+                Account.LoggedIn.TryLogin(_dataBase, message.Token, out var loggedIn);
+
+                var response = new Response(new (loggedIn.Account));
+
+                await socket.SendMessage(response);
+            }
         }
     }
 }

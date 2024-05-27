@@ -9,16 +9,16 @@ internal sealed partial class Account
 
         private DataBase()
         {
-            _accounts = new Dictionary<string, Account>();
+            _accounts = new ();
         }
 
         public static DataBase CreateWithTestUsers()
         {
             var db = new DataBase();
 
-            db.TryAddAccount("Name1", "Surname1", "User1", "test", 10, false);
-            db.TryAddAccount("Name2", "Surname2", "User2", "test", 50, false);
-            db.TryAddAccount("AdminAccount", "AdminSurname", "Admin", "admin", 50, true);
+            db.TryAddAccount("User1 Name", "User1 Surname", "User1", "user", 10, false);
+            db.TryAddAccount("User2 Name", "User2 Surname", "User2", "user", 50, false);
+            db.TryAddAccount("Admin Name", "Admin Surname", "Admin", "admin", 50, true);
 
             return db;
         }

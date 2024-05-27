@@ -28,17 +28,17 @@ public static partial class Logic
                 Sockets.Token token
             )
             {
-                Client.Input();
+                Print.Input();
 
-                var name = Client.ReadValue<string>("Name:")!;
-                var surname = Client.ReadValue<string>("Surname:")!;
+                var name = Print.ReadValue<string>("Name:")!;
+                var surname = Print.ReadValue<string>("Surname:")!;
 
                 var (newName, newSurname, balance, _) = await Handle(socket, token, name, surname);
 
                 return new StringBuilder()
-                    .Append($"Name: {newName}")
-                    .Append($"Surname: {newSurname}")
-                    .Append($"Balance: {balance}");
+                    .AppendLine($"Name: {newName}")
+                    .AppendLine($"Surname: {newSurname}")
+                    .AppendLine($"Balance: {balance}");
             }
 
             private static async Task<AccountDTO> Handle
@@ -59,20 +59,25 @@ public static partial class Logic
             }
         }
 
-        internal static async Task OnServer
-        (
-            Sockets.Handler socket,
-            Request message,
-            Server.Account.DataBase dataBase
-        )
+        internal sealed class OnServer : Server.IHandle<Request>
         {
-            Server.Account.LoggedIn.TryLogin(dataBase, message.Token, out var loggedIn);
+            private readonly Account.DataBase _dataBase;
 
-            loggedIn.Account.EditUserData(message.Name, message.Surname);
+            public OnServer(Account.DataBase dataBase)
+            {
+                _dataBase = dataBase;
+            }
 
-            var response = new Response(new (loggedIn.Account));
+            public async Task Handle(Sockets.Handler socket, Request message)
+            {
+                Account.LoggedIn.TryLogin(_dataBase, message.Token, out var loggedIn);
 
-            await socket.SendMessage(response);
+                loggedIn.Account.EditUserData(message.Name, message.Surname);
+
+                var response = new Response(new (loggedIn.Account));
+
+                await socket.SendMessage(response);
+            }
         }
     }
 }

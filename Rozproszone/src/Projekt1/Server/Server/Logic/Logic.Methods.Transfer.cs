@@ -28,16 +28,16 @@ public static partial class Logic
                 Sockets.Token token
             )
             {
-                Client.Input();
+                Print.Input();
 
-                var to = Client.ReadValue<string>("To:");
-                var amount = Client.ReadValue<int>("Amount:");
+                var to = Print.ReadValue<string>("To:");
+                var amount = Print.ReadValue<int>("Amount:");
 
                 var (success, message, balance) = await Handle(socket, token, to, amount);
 
                 return new StringBuilder()
-                    .Append(success ? "Success" : $"Failed: {message}")
-                    .Append($"Balance: {balance}");
+                    .AppendLine(success ? "Success" : $"Failed: {message}")
+                    .AppendLine($"Balance: {balance}");
             }
 
             private static async Task<Response> Handle
@@ -56,37 +56,41 @@ public static partial class Logic
             }
         }
 
-        internal static async Task OnServer
-        (
-            Sockets.Handler socket,
-            Request message,
-            Server.Account.DataBase dataBase
-        )
+        internal sealed class OnServer : Server.IHandle<Request>
         {
+            private readonly Account.DataBase _dataBase;
 
-            Server.Account.LoggedIn.TryLogin(dataBase, message.Token, out var loggedIn);
-
-            if(dataBase.Accounts.TryGetValue(message.ToLogin, out var target) == false)
+            public OnServer(Account.DataBase dataBase)
             {
-                var resp = new Response(false, "Target not found", loggedIn.Account.Balance);
-
-                await socket.SendMessage(resp);
-
-                return;
+                _dataBase = dataBase;
             }
 
-            if(loggedIn.TryTransfer(target, message.Amount))
+            public async Task Handle(Sockets.Handler socket, Request message)
             {
-                var resp = new Response(false, "Not enough funds", loggedIn.Account.Balance);
+                Account.LoggedIn.TryLogin(_dataBase, message.Token, out var loggedIn);
 
-                await socket.SendMessage(resp);
+                if(_dataBase.Accounts.TryGetValue(message.ToLogin, out var target) == false)
+                {
+                    var resp = new Response(false, "Target not found", loggedIn.Account.Balance);
 
-                return;
+                    await socket.SendMessage(resp);
+
+                    return;
+                }
+
+                if(loggedIn.TryTransfer(target, message.Amount))
+                {
+                    var resp = new Response(false, "Not enough funds", loggedIn.Account.Balance);
+
+                    await socket.SendMessage(resp);
+
+                    return;
+                }
+
+                var response = new Response(true, "Transfer Succeded", loggedIn.Account.Balance);
+
+                await socket.SendMessage(response);
             }
-
-            var response = new Response(true, "Transfer Succeded", loggedIn.Account.Balance);
-
-            await socket.SendMessage(response);
         }
     }
 }

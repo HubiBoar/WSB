@@ -27,9 +27,9 @@ public static partial class Logic
                 Sockets.Token token
             )
             {
-                Client.Input();
+                Print.Input();
 
-                var amount = Client.ReadValue<int>("Amount:");
+                var amount = Print.ReadValue<int>("Amount:");
 
                 var balance = await Handle(socket, token, amount);
 
@@ -53,20 +53,25 @@ public static partial class Logic
             }
         }
 
-        internal static async Task OnServer
-        (
-            Sockets.Handler socket,
-            Request message,
-            Server.Account.DataBase dataBase
-        )
+        internal sealed class OnServer : Server.IHandle<Request>
         {
-            Server.Account.LoggedIn.TryLogin(dataBase, message.Token, out var loggedIn);
+            private readonly Account.DataBase _dataBase;
 
-            loggedIn.Account.Deposit(message.Amount);
+            public OnServer(Account.DataBase dataBase)
+            {
+                _dataBase = dataBase;
+            }
 
-            var response = new Response(loggedIn.Account.Balance);
+            public async Task Handle(Sockets.Handler socket, Request message)
+            {
+                Account.LoggedIn.TryLogin(_dataBase, message.Token, out var loggedIn);
 
-            await socket.SendMessage(response);
+                loggedIn.Account.Deposit(message.Amount);
+
+                var response = new Response(loggedIn.Account.Balance);
+
+                await socket.SendMessage(response);
+            }
         }
     }
 }

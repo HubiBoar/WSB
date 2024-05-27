@@ -19,73 +19,38 @@ public static partial class Logic
             public Task<StringBuilder> Handle(Sockets.Handler socket, Sockets.Token token);
         }
 
-        public static void Input()
-        {
-            Console.WriteLine();
-            Console.WriteLine("<--[Input]-->");
-            Console.WriteLine();
-        }
-
-        public static void Output(StringBuilder builder)
-        {
-            Console.WriteLine();
-            Console.WriteLine("<--[Output]-->");
-            Console.WriteLine();
-            Console.WriteLine(builder);
-        }
-
-        public static void Output(string value)
-        {
-            Output(new StringBuilder(value));
-        }
-
-        public static void Value(string value)
-        {
-            Console.WriteLine(value);
-        }
-
-        public static T ReadValue<T>(string value)
-        {
-            Console.WriteLine(value);
-            return ReadValue<T>();
-        }
-
-        public static T ReadValue<T>()
-        {
-            return (T)Convert.ChangeType(Console.ReadLine(), typeof(T))!;
-        }
-
         public static async Task Run(ITokenProvider tokenProvider, params IHandle[] handles)
         {
-            Console.WriteLine("Client :: Hello, World!");
+            Print.Line("Client :: Hello, World!");
 
             using var client = await Sockets.CreateClient();
 
             var token = await tokenProvider.Handle(client);
 
-            Console.WriteLine("----------------------------------------------------------------------------");
-            Console.WriteLine("Select commands:");
+            Print.Separator();
+            Print.Line("[Select Command]");
+            Print.Separator();
 
             foreach(var handle in handles)
             {
-                Console.WriteLine(handle.ConsoleCommand);
+                Print.Line($"--> {handle.ConsoleCommand}");
             }
 
             while(true)
             {
-                Console.WriteLine("----------------------------------------------------------------------------");
-
-                Console.WriteLine();
-                var command = Console.ReadLine()!;
+                Print.Separator();
+                var command = Print.ReadValue<string>();
 
                 foreach(var handle in handles)
                 {
                     if(handle.ConsoleCommand == command)
                     {
-                        Output(await handle.Handle(client, token));
+                        Print.Output(await handle.Handle(client, token));
                         break;
                     }
                 }
+
+                Print.Line("[Command not found]");
             }
         }
     }

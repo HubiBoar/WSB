@@ -74,7 +74,7 @@ public static partial class Sockets
 
                 if(client.Debug)
                 {
-                    Console.WriteLine($"Message Rciv :: '{decodeded}'");
+                    Print.Line($"Message Rciv :: '{decodeded}'");
                 }
 
                 if(message.Command != TMessage.Command)
@@ -89,7 +89,7 @@ public static partial class Sockets
         }
         catch (Exception ex)
         {
-            Console.WriteLine(ex);
+            Print.Line(ex.ToString());
             throw;
         }
     }
@@ -109,7 +109,7 @@ public static partial class Sockets
 
         if(client.Debug)
         {
-            Console.WriteLine($"Message Rciv :: '{decodeded}'");
+            Print.Line($"Message Rciv :: '{decodeded}'");
         }
 
         if(string.IsNullOrEmpty(decodeded))
@@ -124,7 +124,7 @@ public static partial class Sockets
         }
         catch
         {
-            Console.WriteLine($"Could not serialize Message");
+            Print.Line($"Could not serialize Message");
             return (Status.SerializationIssue, null!, null!);
         }
     }
@@ -139,7 +139,7 @@ public static partial class Sockets
 
         if(socket.Debug)
         {
-            Console.WriteLine($"Message Send :: '{json}'");
+            Print.Line($"Message Send :: '{json}'");
         }
 
         await socket.Socket.SendAsync(encoded, 0);

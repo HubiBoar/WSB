@@ -32,6 +32,8 @@ public static partial class Logic
 
         public static async Task Run(params IHandle[] handlers)
         {
+            Print.Line("Server :: Hello, World!");
+
             using var server = await Sockets.CreateServer();
 
             while (true)
@@ -39,12 +41,12 @@ public static partial class Logic
                 try
                 {
                     var socket = await server.Socket.AcceptAsync();
-                    Console.WriteLine("New connection accepted!");
+                    Print.Line("New connection accepted!");
                     _ = HandleConnectionAsync(new Sockets.Handler(socket, server.Debug));
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine($"Error accepting connection: {ex.Message}");
+                    Print.Line($"Error accepting connection: {ex.Message}");
                 }
             }
 
@@ -58,7 +60,7 @@ public static partial class Logic
 
                         if(success == Sockets.Status.Disconnected)
                         {
-                            Console.WriteLine($"Disconnected");
+                            Print.Line($"Disconnected");
 
                             socket.Dispose();
                             return;
@@ -80,7 +82,7 @@ public static partial class Logic
                                 }
                                 catch (Exception ex)
                                 {
-                                    Console.WriteLine(ex);
+                                    Print.Line(ex.ToString());
                                     break;
                                 }
                             }
@@ -88,7 +90,7 @@ public static partial class Logic
                     }
                     catch (Exception ex)
                     {
-                        Console.WriteLine(ex);
+                        Print.Line(ex.ToString());
                         throw;
                     }
                 }

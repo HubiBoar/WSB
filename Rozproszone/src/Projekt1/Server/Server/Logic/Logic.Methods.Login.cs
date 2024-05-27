@@ -25,22 +25,25 @@ public static partial class Logic
             {
                 while(true)
                 {
-                    var login = Client.ReadValue<string>("Login");
+                    Print.Separator();
+                    var login = Print.ReadValue<string>("Login");
 
-                    var password = Client.ReadValue<string>("Password");
+                    var password = Print.ReadValue<string>("Password");
 
                     var (success, message, token) = await Handle(socket, login!, password!);
 
+                    Print.Separator();
+
                     if(success == false)
                     {
-                        Client.Value($"Login Failed: {message}");
+                        Print.Line($"Login Failed: '{message}'");
                         continue;
                     }
 
-                    Client.Value($"Login Successful");
+                    Print.Line($"Login Successful");
                     if(token.IsAdmin)
                     {
-                        Client.Value("[--ADMIN--]");
+                        Print.Line("[--ADMIN--]");
                     }
                     return token;
                 }

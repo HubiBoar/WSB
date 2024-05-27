@@ -27,15 +27,15 @@ public static partial class Logic
                 Sockets.Token token
             )
             {
-                Client.Input();
+                Print.Input();
 
-                var amount = Client.ReadValue<int>("Amount:");
+                var amount = Print.ReadValue<int>("Amount:");
 
                 var (success, balance) = await Handle(socket, token,  amount);
 
                 return new StringBuilder()
-                    .Append(success ? "Success" : $"Failed")
-                    .Append($"Balance: {balance}");
+                    .AppendLine(success ? "Success" : $"Failed")
+                    .AppendLine($"Balance: {balance}");
             }
 
             private static async Task<Response> Handle
