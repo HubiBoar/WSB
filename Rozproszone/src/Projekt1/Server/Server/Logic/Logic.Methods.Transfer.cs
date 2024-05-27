@@ -1,4 +1,5 @@
 using System.Net.Sockets;
+using System.Text;
 using Shared;
 
 namespace Server.Public;
@@ -17,29 +18,41 @@ public static partial class Logic
             public static string Command => "TransferResp";
         }
 
-
-        public static async Task<(bool Success, int Balance)> OnClient
-        (
-            Sockets.Handler socket,
-            Sockets.Token token,
-            string toLogin,
-            int amount
-        )
+        public sealed class OnClient : Client.IHandle
         {
-            var message = new Request(token, toLogin, amount);
+            public string ConsoleCommand => "Transfer";
 
-            await socket.SendMessage(message);
-
-            while(true)
+            public async Task<StringBuilder> Handle
+            (
+                Sockets.Handler socket,
+                Sockets.Token token
+            )
             {
-                var (success, response) = await socket.TryRecieveMessage<Response>();
+                Client.Input();
 
-                if(success == false)
-                {
-                    continue;
-                }
+                var to = Client.ReadValue<string>("To:");
+                var amount = Client.ReadValue<int>("Amount:");
 
-                return (response.Success, response.Balance);
+                var (success, message, balance) = await Handle(socket, token, to, amount);
+
+                return new StringBuilder()
+                    .Append(success ? "Success" : $"Failed: {message}")
+                    .Append($"Balance: {balance}");
+            }
+
+            private static async Task<Response> Handle
+            (
+                Sockets.Handler socket,
+                Sockets.Token token,
+                string toLogin,
+                int amount
+            )
+            {
+                var message = new Request(token, toLogin, amount);
+
+                await socket.SendMessage(message);
+
+                return await socket.TryRecieveMessage<Response>();
             }
         }
 

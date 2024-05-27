@@ -1,4 +1,3 @@
-using System.Diagnostics;
 using System.Text.Json;
 using Shared;
 
@@ -6,71 +5,92 @@ namespace Server.Public;
 
 public static partial class Logic
 {
-    internal static Method GetMethod<T>(Func<Sockets.Handler, T, Task> func)
-        where T : Sockets.IMessage
+    internal static class Server
     {
-        return new Method(T.Command, (handler, msg) => 
+        public interface IHandle
         {
-            Console.WriteLine(T.Command + "RUNNING");
-            var json = JsonSerializer.Serialize(msg);
-            var casted = JsonSerializer.Deserialize<T>(json);
-            Console.WriteLine(T.Command + "Casted");
+            string Command { get; }
 
-            return func(handler, casted!);
-        });
-    }
-
-    internal sealed record Method(string Command, Func<Sockets.Handler, object, Task> Func);
-
-    internal static async Task OnServer(params Method[] methods)
-    {
-        using var server = await Sockets.CreateServer();
-
-        while (true)
-        {
-            try
-            {
-                var handler = await server.Socket.AcceptAsync();
-                Console.WriteLine("New connection accepted!");
-                _ = HandleConnectionAsync(new Sockets.Handler(handler, server.Debug));
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Error accepting connection: {ex.Message}");
-            }
+            Task Handle(Sockets.Handler handler, object message);
         }
 
-        async Task HandleConnectionAsync(Sockets.Handler handler)
+        public interface IHandle<T> : IHandle
+            where T : Sockets.IMessage
         {
+            string IHandle.Command => T.Command;
+
+            Task IHandle.Handle(Sockets.Handler socket, object message)
+            {
+                var json = JsonSerializer.Serialize(message);
+                var casted = JsonSerializer.Deserialize<T>(json);
+
+                return Handle(socket, casted!);
+            }
+
+            Task Handle(Sockets.Handler socket, T message);
+        }
+
+        public static async Task Run(params IHandle[] handlers)
+        {
+            using var server = await Sockets.CreateServer();
+
             while (true)
             {
                 try
                 {
-                    var (command, payload) = await handler.RecieveMessage();
-
-                    foreach(var method in methods)
-                    {
-                        Console.WriteLine(method.Command);
-                        Console.WriteLine(payload);
-                        if(method.Command == command)
-                        {
-                            try
-                            {
-                                await method.Func(handler, payload);
-                                break;
-                            }
-                            catch (Exception ex)
-                            {
-                                Console.WriteLine(ex);
-                                break;
-                            }
-                        }
-                    }
+                    var socket = await server.Socket.AcceptAsync();
+                    Console.WriteLine("New connection accepted!");
+                    _ = HandleConnectionAsync(new Sockets.Handler(socket, server.Debug));
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine(ex);
-                    throw;
+                    Console.WriteLine($"Error accepting connection: {ex.Message}");
+                }
+            }
+
+            async Task HandleConnectionAsync(Sockets.Handler socket)
+            {
+                while (true)
+                {
+                    try
+                    {
+                        var (success, command, payload) = await socket.RecieveMessage();
+
+                        if(success == Sockets.Status.Disconnected)
+                        {
+                            Console.WriteLine($"Disconnected");
+
+                            socket.Dispose();
+                            return;
+                        }
+
+                        if(success == Sockets.Status.SerializationIssue)
+                        {
+                            continue;
+                        }
+
+                        foreach(var handler in handlers)
+                        {
+                            if(handler.Command == command)
+                            {
+                                try
+                                {
+                                    await handler.Handle(socket, payload);
+                                    break;
+                                }
+                                catch (Exception ex)
+                                {
+                                    Console.WriteLine(ex);
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine(ex);
+                        throw;
+                    }
                 }
             }
         }

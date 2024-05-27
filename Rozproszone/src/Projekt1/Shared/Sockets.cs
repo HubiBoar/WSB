@@ -94,27 +94,38 @@ public static partial class Sockets
         }
     }
 
-    public static async Task<(string Command, object Payload)> RecieveMessage(this Handler client)
+    public enum Status
     {
+        Success,
+        Disconnected,
+        SerializationIssue,
+    }
+
+    public static async Task<(Status Status, string Command, object Payload)> RecieveMessage(this Handler client)
+    {
+        var buffer    = new byte[1_024];
+        var received  = await client.Socket.ReceiveAsync(buffer, SocketFlags.None);
+        var decodeded = Encoding.UTF8.GetString(buffer, 0, received);
+
+        if(client.Debug)
+        {
+            Console.WriteLine($"Message Rciv :: '{decodeded}'");
+        }
+
+        if(string.IsNullOrEmpty(decodeded))
+        {
+            return (Status.Disconnected, null!, null!);
+        }
+
         try
         {
-            var buffer    = new byte[1_024];
-            var received  = await client.Socket.ReceiveAsync(buffer, SocketFlags.None);
-            var decodeded = Encoding.UTF8.GetString(buffer, 0, received);
-
             var message = JsonSerializer.Deserialize<MessageCommandPayload>(decodeded)!;
-
-            if(client.Debug)
-            {
-                Console.WriteLine($"Message Rciv :: '{decodeded}'");
-            }
-
-            return (message.Command, message.Payload);
+            return (Status.Success, message.Command, message.Payload);
         }
-        catch (Exception ex)
+        catch
         {
-            Console.WriteLine(ex);
-            throw;
+            Console.WriteLine($"Could not serialize Message");
+            return (Status.SerializationIssue, null!, null!);
         }
     }
 

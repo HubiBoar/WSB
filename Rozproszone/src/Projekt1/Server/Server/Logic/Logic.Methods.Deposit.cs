@@ -1,3 +1,4 @@
+using System.Text;
 using Shared;
 
 namespace Server.Public;
@@ -16,25 +17,37 @@ public static partial class Logic
             public static string Command => "DepositResp";
         }
 
-        public static async Task<int> OnClient
-        (
-            Sockets.Handler socket,
-            Sockets.Token token,
-            int amount
-        )
+        public sealed class OnClient : Client.IHandle
         {
-            var message = new Request(token, amount);
+            public string ConsoleCommand => "Deposit";
 
-            await socket.SendMessage(message);
-
-            while(true)
+            public async Task<StringBuilder> Handle
+            (
+                Sockets.Handler socket,
+                Sockets.Token token
+            )
             {
-                var (success, response) = await socket.TryRecieveMessage<Response>();
+                Client.Input();
 
-                if(success == false)
-                {
-                    continue;
-                }
+                var amount = Client.ReadValue<int>("Amount:");
+
+                var balance = await Handle(socket, token, amount);
+
+                return new StringBuilder($"Balance: {balance}");
+            }
+
+            private static async Task<int> Handle
+            (
+                Sockets.Handler socket,
+                Sockets.Token token,
+                int amount
+            )
+            {
+                var message = new Request(token, amount);
+
+                await socket.SendMessage(message);
+
+                var response = await socket.TryRecieveMessage<Response>();
 
                 return response.Balance;
             }
