@@ -8,5 +8,6 @@ await Logic.Client.Run
     new Logic.EditInfo.OnClient(),
     new Logic.Deposit.OnClient(),
     new Logic.Withdraw.OnClient(),
-    new Logic.Transfer.OnClient()
+    new Logic.Transfer.OnClient(),
+    new Logic.Admin.EditInfo.OnClient()
 );

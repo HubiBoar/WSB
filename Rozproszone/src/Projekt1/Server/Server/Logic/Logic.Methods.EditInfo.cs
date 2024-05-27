@@ -5,8 +5,7 @@ namespace Server.Public;
 
 public static partial class Logic
 {
-
-    public static class EditInfo
+    public static partial class EditInfo
     {
         public sealed record Request(Sockets.Token Token, string Name, string Surname) : Sockets.ITokenMessage
         {

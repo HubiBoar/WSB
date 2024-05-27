@@ -19,6 +19,10 @@ public static partial class Logic
             public Task<StringBuilder> Handle(Sockets.Handler socket, Sockets.Token token);
         }
 
+        public interface IAdminHandle : IHandle
+        {
+        }
+
         public static async Task Run(ITokenProvider tokenProvider, params IHandle[] handles)
         {
             Print.Line("Client :: Hello, World!");
@@ -33,6 +37,11 @@ public static partial class Logic
 
             foreach(var handle in handles)
             {
+                if(handle is IAdminHandle && token.IsAdmin == false)
+                {
+                    continue;
+                }
+
                 Print.Line($"--> {handle.ConsoleCommand}");
             }
 
@@ -41,16 +50,23 @@ public static partial class Logic
                 Print.Separator();
                 var command = Print.ReadValue<string>();
 
+                bool found = false;
                 foreach(var handle in handles)
                 {
-                    if(handle.ConsoleCommand == command)
+                    if((handle.ConsoleCommand != command) || (handle is IAdminHandle && token.IsAdmin == false))
                     {
-                        Print.Output(await handle.Handle(client, token));
-                        break;
+                        continue;
                     }
+
+                    found = true;
+                    Print.Output(await handle.Handle(client, token));
+                    break;
                 }
 
-                Print.Line("[Command not found]");
+                if(found == false)
+                {
+                    Print.Line("[Command not found]");
+                }
             }
         }
     }

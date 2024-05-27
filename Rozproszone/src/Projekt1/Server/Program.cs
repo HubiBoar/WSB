@@ -10,5 +10,6 @@ await Logic.Server.Run
     new Logic.Deposit.OnServer(dataBase),
     new Logic.Withdraw.OnServer(dataBase),
     new Logic.Transfer.OnServer(dataBase),
-    new Logic.EditInfo.OnServer(dataBase)
+    new Logic.EditInfo.OnServer(dataBase),
+    new Logic.Admin.EditInfo.OnServer(dataBase)
 );
