@@ -1,0 +1,24 @@
+```
+
+BenchmarkDotNet v0.13.12, Ubuntu 22.04.4 LTS (Jammy Jellyfish)
+12th Gen Intel Core i7-1265U, 1 CPU, 12 logical and 6 physical cores
+.NET SDK 8.0.103
+  [Host]     : .NET 8.0.3 (8.0.324.11423), X64 RyuJIT AVX2
+  DefaultJob : .NET 8.0.3 (8.0.324.11423), X64 RyuJIT AVX2
+
+
+```
+| Method                   | ProcessorsCount | FileSize | Mean     | Error    | StdDev   | Median   |
+|------------------------- |---------------- |--------- |---------:|---------:|---------:|---------:|
+| **SortFile_Processor_Count** | **1**               | **10000**    | **31.13 ms** | **1.081 ms** | **3.188 ms** | **30.91 ms** |
+| SortFile_Processor_Max   | 1               | 10000    | 31.73 ms | 1.135 ms | 3.310 ms | 31.50 ms |
+| **SortFile_Processor_Count** | **2**               | **10000**    | **33.82 ms** | **1.521 ms** | **4.460 ms** | **33.48 ms** |
+| SortFile_Processor_Max   | 2               | 10000    | 32.00 ms | 1.241 ms | 3.602 ms | 31.20 ms |
+| **SortFile_Processor_Count** | **3**               | **10000**    | **33.97 ms** | **1.246 ms** | **3.654 ms** | **33.70 ms** |
+| SortFile_Processor_Max   | 3               | 10000    | 30.36 ms | 1.329 ms | 3.917 ms | 29.32 ms |
+| **SortFile_Processor_Count** | **4**               | **10000**    | **29.17 ms** | **1.162 ms** | **3.427 ms** | **27.86 ms** |
+| SortFile_Processor_Max   | 4               | 10000    | 32.10 ms | 1.251 ms | 3.687 ms | 31.89 ms |
+| **SortFile_Processor_Count** | **5**               | **10000**    | **33.74 ms** | **1.507 ms** | **4.421 ms** | **34.21 ms** |
+| SortFile_Processor_Max   | 5               | 10000    | 30.48 ms | 1.230 ms | 3.568 ms | 30.60 ms |
+| **SortFile_Processor_Count** | **6**               | **10000**    | **30.33 ms** | **1.360 ms** | **3.989 ms** | **29.38 ms** |
+| SortFile_Processor_Max   | 6               | 10000    | 26.94 ms | 0.508 ms | 0.476 ms | 26.94 ms |

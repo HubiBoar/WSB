@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+<meta charset='utf-8' />
+<title>FileSortBenchmark-20240602-193537</title>
+
+<style type="text/css">
+	table { border-collapse: collapse; display: block; width: 100%; overflow: auto; }
+	td, th { padding: 6px 13px; border: 1px solid #ddd; text-align: right; }
+	tr { background-color: #fff; border-top: 1px solid #ccc; }
+	tr:nth-child(even) { background: #f8f8f8; }
+</style>
+</head>
+<body>
+<pre><code>
+BenchmarkDotNet v0.13.12, Ubuntu 22.04.4 LTS (Jammy Jellyfish)
+12th Gen Intel Core i7-1265U, 1 CPU, 12 logical and 6 physical cores
+.NET SDK 8.0.103
+  [Host]     : .NET 8.0.3 (8.0.324.11423), X64 RyuJIT AVX2
+  DefaultJob : .NET 8.0.3 (8.0.324.11423), X64 RyuJIT AVX2
+</code></pre>
+<pre><code></code></pre>
+
+<table>
+<thead><tr><th>Method            </th><th>ProcessorsCount</th><th>FileSize</th><th>Mean</th><th>Error</th><th>StdDev</th><th>Median</th>
+</tr>
+</thead><tbody><tr><td>SortFile_Processor_Count</td><td>1</td><td>10000</td><td>31.13 ms</td><td>1.081 ms</td><td>3.188 ms</td><td>30.91 ms</td>
+</tr><tr><td>SortFile_Processor_Max</td><td>1</td><td>10000</td><td>31.73 ms</td><td>1.135 ms</td><td>3.310 ms</td><td>31.50 ms</td>
+</tr><tr><td>SortFile_Processor_Count</td><td>2</td><td>10000</td><td>33.82 ms</td><td>1.521 ms</td><td>4.460 ms</td><td>33.48 ms</td>
+</tr><tr><td>SortFile_Processor_Max</td><td>2</td><td>10000</td><td>32.00 ms</td><td>1.241 ms</td><td>3.602 ms</td><td>31.20 ms</td>
+</tr><tr><td>SortFile_Processor_Count</td><td>3</td><td>10000</td><td>33.97 ms</td><td>1.246 ms</td><td>3.654 ms</td><td>33.70 ms</td>
+</tr><tr><td>SortFile_Processor_Max</td><td>3</td><td>10000</td><td>30.36 ms</td><td>1.329 ms</td><td>3.917 ms</td><td>29.32 ms</td>
+</tr><tr><td>SortFile_Processor_Count</td><td>4</td><td>10000</td><td>29.17 ms</td><td>1.162 ms</td><td>3.427 ms</td><td>27.86 ms</td>
+</tr><tr><td>SortFile_Processor_Max</td><td>4</td><td>10000</td><td>32.10 ms</td><td>1.251 ms</td><td>3.687 ms</td><td>31.89 ms</td>
+</tr><tr><td>SortFile_Processor_Count</td><td>5</td><td>10000</td><td>33.74 ms</td><td>1.507 ms</td><td>4.421 ms</td><td>34.21 ms</td>
+</tr><tr><td>SortFile_Processor_Max</td><td>5</td><td>10000</td><td>30.48 ms</td><td>1.230 ms</td><td>3.568 ms</td><td>30.60 ms</td>
+</tr><tr><td>SortFile_Processor_Count</td><td>6</td><td>10000</td><td>30.33 ms</td><td>1.360 ms</td><td>3.989 ms</td><td>29.38 ms</td>
+</tr><tr><td>SortFile_Processor_Max</td><td>6</td><td>10000</td><td>26.94 ms</td><td>0.508 ms</td><td>0.476 ms</td><td>26.94 ms</td>
+</tr></tbody></table>
+</body>
+</html>
