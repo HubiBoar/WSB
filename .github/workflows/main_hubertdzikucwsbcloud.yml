@@ -11,7 +11,7 @@ on:
 
 defaults:
   run:
-    working-directory: .HTMX/src
+    working-directory: HTMX/src
 
 jobs:
   build:
