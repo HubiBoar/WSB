@@ -37,8 +37,8 @@ if __name__ == '__main__':
 
 - Screenshot:
 
-![Alt text](./mapreduce/Zad1-Start.png)
-![Alt text](./mapreduce/Zad1-End.png)
+![Alt text](https://github.com/HubiBoar/WSB/blob/main/BigData/mapreduce/Zad1-Start.png?raw=true)
+![Alt text](https://github.com/HubiBoar/WSB/blob/main/BigData/mapreduce/Zad1-End.png?raw=true)
 
 ### 2 HIVE (HQL)
 
@@ -54,7 +54,7 @@ GROUP BY movieId;
 ```
 - Screenshot:
   
-![Alt text](./HIVE/Zad1.png)
+![Alt text](https://github.com/HubiBoar/WSB/blob/main/BigData/HIVE/Zad1.png?raw=true)
 
 #### 2.2
 - Skrypt:
@@ -68,7 +68,7 @@ GROUP BY m.movieId, m.title;
 
 - Screenshot:
   
-![Alt text](./HIVE/Zad2.png)
+![Alt text](https://github.com/HubiBoar/WSB/blob/main/BigData/HIVE/Zad2.png?raw=true)
 
 ### 3 PIG
 
@@ -89,8 +89,8 @@ DUMP average_ratings;
 
 - Screenshot:
   
-![Alt text](./PIG/Zad1-Start.png)
-![Alt text](./PIG/Zad1-End.png)
+![Alt text](https://github.com/HubiBoar/WSB/blob/main/BigData/PIG/Zad1-Start.png?raw=true)
+![Alt text](https://github.com/HubiBoar/WSB/blob/main/BigData/PIG/Zad1-End.png?raw=true)
 
 #### 3.2
 Wymagalo dodanie plikow oraz odpalenie skryptu pig przez ssh.
@@ -115,8 +115,8 @@ DUMP final_result;
 
 - Screenshot:
   
-![Alt text](./PIG/Zad2-Start.png)
-![Alt text](./PIG/Zad2-End.png) 
+![Alt text](https://github.com/HubiBoar/WSB/blob/main/BigData/PIG/Zad2-Start.png?raw=true)
+![Alt text](https://github.com/HubiBoar/WSB/blob/main/BigData/PIG/Zad2-End.png?raw=true) 
 
 ### 4 NEO4J
 - Skrypt:
