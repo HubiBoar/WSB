@@ -1,0 +1,26 @@
+CREATE (mbank:Company {name: "MBANK"})
+
+CREATE (supervisory:Board {name: "Organ Nadzoru"}) 
+CREATE (management:Board {name: "Zarzad"})
+CREATE (representatives:Board {name: "Prokurenci"})
+
+CREATE (felix:Person {name: "Felix Kremer", title: "Prokurent"})
+CREATE (pawel:Person {name: "Pawel Kucharski", title: "Prokurent"})
+CREATE (krzysztof:Person {name: "Krzysztof Bratos", title: "Wiceprezes Zarzadu"})
+CREATE (pascal:Person {name: "Pascal Ruhland", title: "Wiceprezes Zarzadu"})
+CREATE (bernhard:Person {name: "Bernhard Spalt", title: "Czlonek Organow Nadzoru"})
+CREATE (thomas:Person {name: "Thomas Schaufler", title: "Czlonek Organow Nadzoru"})
+
+CREATE (mbank)-[:HAS_SUPERVISORY_BOARD]->(supervisory)
+CREATE (mbank)-[:HAS_MANAGEMENT_BOARD]->(management)
+CREATE (mbank)-[:HAS_REPRESENTATIVES]->(representatives)
+CREATE (supervisory)-[:OVERSEES]->(mbank)
+CREATE (management)-[:MANAGES]->(mbank)
+CREATE (representatives)-[:AUTHORIZED_BY]->(mbank)
+
+CREATE (felix)-[:BELONGS_TO]->(representatives)
+CREATE (pawel)-[:BELONGS_TO]->(representatives)
+CREATE (krzysztof)-[:BELONGS_TO]->(management)
+CREATE (pascal)-[:BELONGS_TO]->(management)
+CREATE (bernhard)-[:BELONGS_TO]->(supervisory)
+CREATE (thomas)-[:BELONGS_TO]->(supervisory)
