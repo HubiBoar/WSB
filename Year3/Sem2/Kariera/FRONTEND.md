@@ -42,6 +42,7 @@ Witryna powinna zawierać następujące strony:
 - Projekty
 - Artykuły
 - Kontakt
+
 Witryna musi posiadać pasek nawigacyjny, który powinien być obecny na wszystkich stronach i zawierać linki do każdej z nich.
 Nie jest wymagane stylowanie strony; Twoim jedynym zadaniem jest stworzenie jej struktury przy użyciu HTML.
 Cele tego projektu to:
