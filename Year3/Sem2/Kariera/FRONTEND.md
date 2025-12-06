@@ -31,3 +31,14 @@ Pełna lista umiejętności frontend developera, którymi warto się zainteresow
 
 ### Przykładowa ścieżka nauczania dla roli Frontend Developer 
 [<img width="947" height="747" alt="image" src="https://github.com/user-attachments/assets/6a22e173-e79a-481f-9a8d-35f5dfc182b4" />](https://roadmap.sh/frontend?r=frontend-beginner)
+
+
+## Przykładowe projekty portfolio
+
+#### Jednostronne CV napsiane tylko w HTML
+
+Wymagania dla tego projektu:
+- Semantyczny HTML: Użycie odpowiednich tagów HTML w celu właściwej strukturyzacji Twojego CV.
+- Meta tagi SEO: Zamieszczenie kluczowych meta tagów niezbędnych do optymalizacji pod kątem wyszukiwarek (SEO).
+- Tagi Open Graph (OG): Dodanie tagów OG dla lepszego formatowania podczas udostępniania strony w mediach społecznościowych.
+- Favicon: Dodanie ikony strony (favicony) dla Twojej strony CV.
