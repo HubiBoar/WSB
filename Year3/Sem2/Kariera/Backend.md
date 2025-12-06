@@ -55,7 +55,7 @@ Ucz się równolegle Gita i GitHuba — to kluczowe narzędzia w pracy programis
 - uruchomienie projektu w chmurze (Render, Railway, Vercel, Azure, AWS).
 
 ## Możliwości praktyk i staży dla studentów Backend
-Gdzie szukać?
+### Gdzie szukać?
 - Kariera firm IT (np. Accenture, Deloitte, Sii, Capgemini, Motorola, Nokia, Allegro, OLX)
 - LinkedIn – filtry: "Intern", "Praktykant", "Junior"
 - No Fluff Jobs, JustJoinIT – kategoria "Junior/Intern"
