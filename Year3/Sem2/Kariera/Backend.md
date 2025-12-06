@@ -6,8 +6,14 @@
 - Rola backend developera jest kluczowa dla przetwarzania i zabezpieczania danych, stanowiąc fundament, na którym frontend może dostarczać płynne i dopracowane doświadczenia użytkownika.
 
 ## Technologie
-Jeśli jesteś kompletnym początkującym, możesz zacząć od nauki języka programowania backendowego, takiego jak Python, Ruby, Java, Go itp.
-Gdy osiągniesz poziom podstawowy lub średnio zaawansowany, wykonaj kolejne kroki:
+[<img width="1154" height="967" alt="image" src="https://github.com/user-attachments/assets/b4cd6307-69f5-44c1-8440-fa1580ce37a3" />](https://roadmap.sh/backend?r=backend-beginner)
+
+### Nauka języka programowania backendowego
+- Python
+- Ruby
+- Java
+- Go
+- C#
 
 ### Nauka ekosystemu języka
 Poznaj menedżera pakietów dla wybranego języka.
@@ -69,6 +75,4 @@ Gdzie szukać?
 - dołączyć do projektów open-source,
 - udzielać się w społeczności (Discordy, meetupy, hackathony),
 - robić certyfikaty (AWS, Azure, Google Cloud – nawet podstawowe).
-
-[<img width="1154" height="967" alt="image" src="https://github.com/user-attachments/assets/b4cd6307-69f5-44c1-8440-fa1580ce37a3" />](https://roadmap.sh/backend?r=backend-beginner)
 
