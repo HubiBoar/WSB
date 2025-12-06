@@ -35,10 +35,39 @@ Pełna lista umiejętności frontend developera, którymi warto się zainteresow
 
 ## Przykładowe projekty portfolio
 
-#### Jednostronne CV napsiane tylko w HTML
+#### Prosta strona w HTML
+W tym projekcie Twoim zadaniem jest stworzenie prostej, wielostronicowej witryny internetowej, używając wyłącznie HTML.
+Witryna powinna zawierać następujące strony:
+- Strona główna
+- Projekty
+- Artykuły
+- Kontakt
+Witryna musi posiadać pasek nawigacyjny, który powinien być obecny na wszystkich stronach i zawierać linki do każdej z nich.
+Nie jest wymagane stylowanie strony; Twoim jedynym zadaniem jest stworzenie jej struktury przy użyciu HTML.
+Cele tego projektu to:
+- Nauka tworzenia wielostronicowej witryny internetowej.
+- Semantyczne strukturyzowanie strony przy użyciu HTML.
+- Stworzenie struktury, do której łatwo będzie dodać style w przyszłości.
+- Dodanie meta tagów SEO do witryny.
 
-Wymagania dla tego projektu:
-- Semantyczny HTML: Użycie odpowiednich tagów HTML w celu właściwej strukturyzacji Twojego CV.
-- Meta tagi SEO: Zamieszczenie kluczowych meta tagów niezbędnych do optymalizacji pod kątem wyszukiwarek (SEO).
-- Tagi Open Graph (OG): Dodanie tagów OG dla lepszego formatowania podczas udostępniania strony w mediach społecznościowych.
-- Favicon: Dodanie ikony strony (favicony) dla Twojej strony CV.
+#### Kalendarz UI
+W tym projekcie Twoim zadaniem jest stworzenie prostego interfejsu (UI) kalendarza (datepicker), używając wyłącznie HTML i CSS. Nie będzie to w pełni funkcjonalny kalendarz, a jedynie statyczny komponent UI, który możesz później rozbudować za pomocą JavaScript.
+Celem tego projektu jest przećwiczenie technik pozycjonowania, układu (layoutu) i stylizacji w CSS. Poniżej znajduje się wstępny szkic (mockup) przedstawiający interfejs kalendarza, który musisz stworzyć.
+
+#### Aplikacja do zarządzania zadaniami
+Stwórz aplikację do zarządzania zadaniami (task tracker), która umożliwi użytkownikom:
+- Dodawanie nowych zadań.
+- Oznaczanie zadań jako ukończone.
+- Usuwanie zadań.
+- Mechanizmy obsługi zadań:
+
+Ukończone zadania będą przenoszone na koniec listy i zostaną przekreślone.
+Użytkownicy będą mieli możliwość odznaczenia zadania, aby przywrócić je do listy zadań oczekujących.
+
+## Praktyki i staż
+### Gdzie szukać praktyk i staży?
+Praktyk i staż najlepiej szukać na portalach z ogłoszeniami IT takimi jak JustJoin.it, najpopularniejszy polski portal IT (ma osobną kategorię „Junior/Intern”), No Fluff Jobs, Pracuj.pl czy LinkedIn
+Wiele dużych firm prowadzi własne programy stażowe takie jak np:
+- Google Summer of Code (dla studentów, open-source)
+- Nokia Academy, Samsung Internship, Capgemini, Accenture, Intel, Allegro Summer e-Xperience, CD Projekt
+Warto również obserwować lokalne software house’y, które często mają praktyki, ale nie reklamują ich szeroko — warto napisać do nich bezpośrednio.
