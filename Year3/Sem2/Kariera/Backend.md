@@ -32,6 +32,7 @@ Zaimplementuj podstawową autoryzację i uwierzytelnianie.
 ### Kontrola wersji
 Ucz się równolegle Gita i GitHuba — to kluczowe narzędzia w pracy programisty.
 
+### Przykładowa ścieżka nauczania dla roli Backend Developer
 [<img width="1154" height="967" alt="image" src="https://github.com/user-attachments/assets/b4cd6307-69f5-44c1-8440-fa1580ce37a3" />](https://roadmap.sh/backend?r=backend-beginner)
 
 ## Przykładowe projekty do portfolio backend developera (samodzielne do wykonania)
