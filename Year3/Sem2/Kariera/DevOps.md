@@ -9,7 +9,6 @@
 - Rola DevOpsa jest fundamentem nowoczesnych zespołów IT, ponieważ umożliwia szybkie iteracje, stabilne wydania i łatwe skalowanie usług.
 
 ## Wymagane umiejętności techniczne
-[<img width="1286" height="1060" alt="image" src="https://github.com/user-attachments/assets/3727477f-6e43-41ec-9027-4c6b4b2444da" />](https://roadmap.sh/devops?r=devops-beginner)
 - Systemy operacyjne
 - Linux (podstawy terminala, zarządzanie procesami, uprawnienia, sieć)
 - Bash / Shell scripting
@@ -33,6 +32,9 @@
 - GitLab CI
 - Infrastructure as Code (IaC)
 - Terraform – tworzenie infrastruktury w chmurze jak kod
+
+### Przykładowa ścieżka nauczania dla roli Backend Developer
+[<img width="1286" height="1060" alt="image" src="https://github.com/user-attachments/assets/3727477f-6e43-41ec-9027-4c6b4b2444da" />](https://roadmap.sh/devops?r=devops-beginner)
 
 ### Przykładowe projekty do portfolio DevOps (samodzielne)
 - Dockerizacja prostej aplikacji (np. backend + baza)
