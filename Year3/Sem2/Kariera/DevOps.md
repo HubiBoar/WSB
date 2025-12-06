@@ -25,21 +25,12 @@
 - Konteneryzacja
 - Docker – budowa obrazów, kontenery, wolumeny, sieci
 - Docker Compose – proste środowiska wieloservice’owe
-- Orkiestracja kontenerów
-- Kubernetes (K8s) — podstawowe obiekty (Pod, Deployment, Service, Ingress)
-- Helm (opcjonalnie)
 - CI/CD
 - Poznaj platformy i narzędzia automatyzacji:
 - GitHub Actions
 - GitLab CI
-- Jenkins
 - Infrastructure as Code (IaC)
 - Terraform – tworzenie infrastruktury w chmurze jak kod
-- Ansible – automatyzacja konfiguracji serwerów
-- Monitoring i logging
-- Prometheus + Grafana
-- ELK / OpenSearch
-- Loki
 
 ### Przykładowe projekty do portfolio DevOps (samodzielne)
 - Dockerizacja prostej aplikacji (np. backend + baza)
