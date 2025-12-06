@@ -7,9 +7,9 @@ Główne umiejętności wymagane, aby zostać frontend developerem, to HTML, CSS
 Pełna lista umiejętności frontend developera, którymi warto się zainteresować, aby podnieść swoje kwalifikacje, wygląda następująco:
 
 - Zrozumienie kluczowych technologii: HTML, CSS i JavaScript.
-- Zrozumienie dostępności (accessibility): Wiedza o tym, jak wpływa ona na doświadczenia użytkowników.
+- Zrozumienie accessibility: Wiedza o tym, jak wpływa ona na doświadczenia użytkowników.
 - Systemy kontroli wersji: Znajomość narzędzi takich jak Git.
-- Responsywne projektowanie (Responsive design): Wdrażanie projektów, które dostosowują się do różnych urządzeń i rozmiarów ekranów.
+- Responsive design: Wdrażanie projektów, które dostosowują się do różnych urządzeń i rozmiarów ekranów.
 - User experience (UX): Zrozumienie podstawowych zasad UX.
 - SEO: Wiedza na temat optymalizacji pod kątem wyszukiwarek i tego, jak można ją wykorzystać w kodzie.
 - RESTful API: Zrozumienie podstaw RESTful API oraz sposobów korzystania z nich.
