@@ -2,7 +2,6 @@
 
 ## Wymagane umiejętności techniczne
 
-
 Główne umiejętności wymagane, aby zostać frontend developerem, to HTML, CSS i JavaScript. Pozostałe są również ważne, ale bez tych trzech podstawowych nie będziesz w stanie zastosować żadnej z nich.
 
 Pełna lista umiejętności frontend developera, którymi warto się zainteresować, aby podnieść swoje kwalifikacje, wygląda następująco:
