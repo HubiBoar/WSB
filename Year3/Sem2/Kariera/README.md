@@ -6,6 +6,6 @@ Jako student, który chce wejść do branży IT, możesz wybierać spośród kil
 Najczęściej wybieranymi ścieżkami kariery są:
 - [Frontend Devoloper](Frontend.md)
 - [Backend Devoloper](Backend.md)
-- [Inżynier Devops](Devops.md)
+- [Inżynier Devops](DevOps.md)
 
 Przejdź do poszczególnych ścieżek aby dowiedzieć się więcej
