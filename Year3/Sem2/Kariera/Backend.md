@@ -64,15 +64,15 @@ Ucz się równolegle Gita i GitHuba — to kluczowe narzędzia w pracy programis
 - programy stażowe dużych firm (np. Google, Microsoft, IBM, Cisco)
 
 ### Czego oczekują pracodawcy od stażysty?
-- podstaw programowania i jednego języka backendowego
+- podstaw programowania jednego języka backendowego
 - znajomości Git
 - motywacji do nauki
 - umiejętności pracy w zespole
 
 ### Jak zwiększyć swoje szanse?
-- mieć portfolio z minimum 2–3 projektami
+- portfolio z minimum 2–3 projektami
 - aktywnie rozwijać GitHuba
-- dołączyć do projektów open-source,
-- udzielać się w społeczności (Discordy, meetupy, hackathony),
-- robić certyfikaty (AWS, Azure, Google Cloud – nawet podstawowe).
+- dołączyć do projektów open-source
+- udzielać się w społeczności (Discordy, meetupy, hackathony)
+- robić certyfikaty (AWS, Azure, Google Cloud – nawet podstawowe)
 
