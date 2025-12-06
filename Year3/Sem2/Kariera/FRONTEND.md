@@ -19,4 +19,4 @@ Pełna lista umiejętności frontend developera, którymi warto się zainteresow
 - Wydajność sieciowa (Web performance): Zrozumienie optymalizacji wydajności stron i wskaźników Core Web Vitals.
 - TypeScript: Zrozumienie, jak działa TypeScript i kiedy go używać.
 [<img width="947" height="747" alt="image" src="https://github.com/user-attachments/assets/6a22e173-e79a-481f-9a8d-35f5dfc182b4" />]
-(https://roadmap.sh/pdfs/roadmaps/frontend-beginner.pdf)
+(https://roadmap.sh/frontend?r=frontend-beginner)
