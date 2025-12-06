@@ -67,8 +67,13 @@ Użytkownicy będą mieli możliwość odznaczenia zadania, aby przywrócić je 
 
 ## Praktyki i staż
 ### Gdzie szukać praktyk i staży?
-Praktyk i staż najlepiej szukać na portalach z ogłoszeniami IT takimi jak JustJoin.it, najpopularniejszy polski portal IT (ma osobną kategorię „Junior/Intern”), No Fluff Jobs, Pracuj.pl czy LinkedIn
+Praktyk i staży najlepiej szukać na portalach z ogłoszeniami IT takimi jak JustJoin.it, najpopularniejszy polski portal IT (ma osobną kategorię „Junior/Intern”), No Fluff Jobs, Pracuj.pl czy LinkedIn
 Wiele dużych firm prowadzi własne programy stażowe takie jak np:
-- Google Summer of Code (dla studentów, open-source)
-- Nokia Academy, Samsung Internship, Capgemini, Accenture, Intel, Allegro Summer e-Xperience, CD Projekt
+- Google Summer of Code (dla studentów, open-source),
+- Nokia Academy,
+- Samsung Internship, 
+- Capgemini, Accenture, 
+- Intel,
+- Allegro Summer e-Xperience,
+- CD Projekt
 Warto również obserwować lokalne software house’y, które często mają praktyki, ale nie reklamują ich szeroko — warto napisać do nich bezpośrednio.
