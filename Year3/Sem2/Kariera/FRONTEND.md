@@ -18,3 +18,4 @@ Pełna lista umiejętności frontend developera, którymi warto się zainteresow
 - Frameworki: Znajomość wiodącego frameworka frontendowego (takiego jak React lub Vue) i ogólne zrozumienie pozostałych.
 - Wydajność sieciowa (Web performance): Zrozumienie optymalizacji wydajności stron i wskaźników Core Web Vitals.
 - TypeScript: Zrozumienie, jak działa TypeScript i kiedy go używać.
+<img width="947" height="747" alt="image" src="https://github.com/user-attachments/assets/6a22e173-e79a-481f-9a8d-35f5dfc182b4" />
