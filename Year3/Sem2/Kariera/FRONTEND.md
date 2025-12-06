@@ -1,4 +1,4 @@
-# Ścieżka Kariery Frontend
+# Frontend Developer
 
 ## Kim jest Frontend Developer?
 Frontend Developer to specjalista, który wykorzystuje technologie takie jak HTML, CSS i JavaScript do projektowania i budowania wizualnej oraz interaktywnej części stron i aplikacji – czyli wszystkiego, z czym użytkownik końcowy ma bezpośredni kontakt.
