@@ -6,58 +6,69 @@
 - Rola backend developera jest kluczowa dla przetwarzania i zabezpieczania danych, stanowiąc fundament, na którym frontend może dostarczać płynne i dopracowane doświadczenia użytkownika.
 
 ## Technologie
+Jeśli jesteś kompletnym początkującym, możesz zacząć od nauki języka programowania backendowego, takiego jak Python, Ruby, Java, Go itp.
+Gdy osiągniesz poziom podstawowy lub średnio zaawansowany, wykonaj kolejne kroki:
 
-### Python
+### Nauka ekosystemu języka
+Poznaj menedżera pakietów dla wybranego języka.
+Naucz się instalować oraz używać zewnętrznych bibliotek i paczek w swoich aplikacjach.
 
-Python to wszechstronny, prosty w nauce język programowania.
-- czytelna składnia, szybkość tworzenia aplikacji,
-- bogaty ekosystem (Django, Flask, FastAPI),
-- popularny w backendzie, analizie danych, AI i DevOps.
+### Bazy danych
+Opanuj podstawy relacyjnych baz danych, np. PostgreSQL.
+Naucz się wykonywać proste operacje CRUD (Create, Read, Update, Delete).
 
-### Java
+### Frameworki i API
+Opcjonalnie wybierz i naucz się frameworka webowego dla wybranego języka.
+Zbuduj proste RESTful API.
+Zaimplementuj podstawową autoryzację i uwierzytelnianie.
 
-Java to jeden z najstarszych, najstabilniejszych i najpopularniejszych języków backendowych.
-- kompilowany do bytecode’u działającego na maszynie wirtualnej (JVM),
-- świetny do dużych systemów korporacyjnych,
-- popularne frameworki: Spring, Jakarta EE.
+### Kontrola wersji
+Ucz się równolegle Gita i GitHuba — to kluczowe narzędzia w pracy programisty.
 
-### Ruby
+## Przykładowe projekty do portfolio backend developera (samodzielne do wykonania)
 
-Ruby to język zaprojektowany z myślą o prostocie i przyjemności programowania.
-- najbardziej znany z frameworka Ruby on Rails,
-- szybkie prototypowanie i tworzenie aplikacji webowych,
-- mniejsza popularność niż kiedyś, ale nadal silna społeczność.
+- Proste API do książek/filmów/produktów z CRUD-em
+- Aplikacja do zarządzania zadaniami (ToDo API)
+- Prosty system logowania/rejestracji użytkowników
+- Aplikacja obsługująca pliki (upload/download)
+- Prosty sklepik internetowy (koszyk, zamówienia)
 
-### PHP
+### Projekty bardziej zaawansowane
 
-PHP to język skryptowy stworzony specjalnie do budowania stron www
-- bardzo popularny w świecie webowym (WordPress, Joomla, Drupal),
-- szeroka dostępność hostingów,
-- nowoczesne frameworki: Laravel, Symfony.
+- API z rolami użytkowników (admin/user)
+- Integracja z zewnętrznym API (np. płatności, pogoda)
+- Projekt mikroserwisowy (2–3 małe serwisy)
+- Chat w czasie rzeczywistym (WebSockety)
+- Aplikacja z Dockerem, CI/CD i dokumentacją API (Swagger)
 
-### JavaScript (Node.js)
+### Co dodać do portfolio?
+- kod na GitHub,
+- opis projektu w README,
+- screenshoty lub krótkie demo,
+- lista użytych technologii,
+- uruchomienie projektu w chmurze (Render, Railway, Vercel, Azure, AWS).
 
-JavaScript to język działający pierwotnie tylko w przeglądarkach, a dzięki Node.js również po stronie serwera.
-- jeden język dla frontend + backend,
-- duża wydajność dzięki silnikowi V8,
-- frameworki: Express.js, NestJS.
-  
-### .NET
+## Możliwości praktyk i staży dla studentów Backend
+Gdzie szukać?
+- Kariera firm IT (np. Accenture, Deloitte, Sii, Capgemini, Motorola, Nokia, Allegro, OLX)
+- LinkedIn – filtry: "Intern", "Praktykant", "Junior"
+- No Fluff Jobs, JustJoinIT – kategoria "Junior/Intern"
+- kariery uczelniane lub biura karier
+- hackathony (online i stacjonarne)
+- programy stażowe dużych firm (np. Google, Microsoft, IBM, Cisco)
 
-.NET to platforma programistyczna firmy Microsoft, najczęściej używana z językiem C#.
-Cechy:
-- bardzo dobrze nadaje się do aplikacji korporacyjnych, API, mikroserwisów,
-- szybka i stabilna platforma,
-- framework ASP.NET Core jest popularny w backendzie.
+### Czego oczekują pracodawcy od stażysty?
+- podstaw programowania i jednego języka backendowego
+- znajomości Git
+- motywacji do nauki
+- umiejętności pracy w zespole
 
-### Go (Golang)
+### Jak zwiększyć swoje szanse?
+- mieć portfolio z minimum 2–3 projektami
+- aktywnie rozwijać GitHuba
+- dołączyć do projektów open-source,
+- udzielać się w społeczności (Discordy, meetupy, hackathony),
+- robić certyfikaty (AWS, Azure, Google Cloud – nawet podstawowe).
 
-Go, nazywany również Golang, to stosunkowo młody język stworzony przez Google, zaprojektowany z myślą o wysokiej wydajności i prostej składni.
-- bardzo szybki, zbliżony wydajnością do języków kompilowanych takich jak C,
-- wbudowana obsługa współbieżności (goroutines), co czyni go idealnym do aplikacji sieciowych i mikroserwisów,
-- prosta składnia i brak nadmiernych komplikacji — łatwy w utrzymaniu dużych projektów,
-- szeroko wykorzystywany w infrastrukturze, DevOps, systemach rozproszonych i narzędziach chmurowych (np. Kubernetes jest napisany w Go),
-- popularne frameworki i biblioteki: Gin, Echo, Fiber.
-- 
 [<img width="1154" height="967" alt="image" src="https://github.com/user-attachments/assets/b4cd6307-69f5-44c1-8440-fa1580ce37a3" />](https://roadmap.sh/backend?r=backend-beginner)
 
