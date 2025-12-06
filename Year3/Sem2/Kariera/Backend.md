@@ -7,8 +7,7 @@
 - Do kluczowych zadań należy także integracja z zewnętrznymi usługami, takimi jak bramki płatnicze czy usługi chmurowe, a także poprawa wydajności i skalowalności systemów.
 - Rola backend developera jest kluczowa dla przetwarzania i zabezpieczania danych, stanowiąc fundament, na którym frontend może dostarczać płynne i dopracowane doświadczenia użytkownika.
 
-## Technologie
-[<img width="1154" height="967" alt="image" src="https://github.com/user-attachments/assets/b4cd6307-69f5-44c1-8440-fa1580ce37a3" />](https://roadmap.sh/backend?r=backend-beginner)
+## Wymagane umiejętności techniczne
 
 ### Nauka języka programowania backendowego
 - Python
@@ -32,6 +31,8 @@ Zaimplementuj podstawową autoryzację i uwierzytelnianie.
 
 ### Kontrola wersji
 Ucz się równolegle Gita i GitHuba — to kluczowe narzędzia w pracy programisty.
+
+[<img width="1154" height="967" alt="image" src="https://github.com/user-attachments/assets/b4cd6307-69f5-44c1-8440-fa1580ce37a3" />](https://roadmap.sh/backend?r=backend-beginner)
 
 ## Przykładowe projekty do portfolio backend developera (samodzielne do wykonania)
 
